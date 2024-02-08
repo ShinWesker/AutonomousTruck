@@ -36,7 +36,6 @@ public class TrailerChassis extends AChassis {
         cargoSpace.load(pallet,index);
     }
 
-
     public static class TrailerChassisBuilder {
         private BrakeLight[] brakeLights;
         private Axle[] axles;
