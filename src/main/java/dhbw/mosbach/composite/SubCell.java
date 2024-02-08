@@ -1,0 +1,26 @@
+package dhbw.mosbach.composite;
+
+public class SubCell extends CellConstruct {
+    public SubCell(){
+        for (int i = 0; i < 5; i++) {
+            addUnit(new Cell());
+        }
+    }
+
+    @Override
+    public void charge() {
+        for (CellConstruct unit : units) {
+            unit.charge();
+        }
+    }
+
+    @Override
+    public void discharge(int amount) {
+        for (CellConstruct unit : units) {
+            if (amount <= 0) break;
+            unit.discharge(1);
+            amount--;
+        }
+    }
+
+}

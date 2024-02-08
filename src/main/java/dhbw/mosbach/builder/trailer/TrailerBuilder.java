@@ -1,0 +1,49 @@
+package dhbw.mosbach.builder.trailer;
+
+import dhbw.mosbach.builder.components.Brake;
+import dhbw.mosbach.builder.enums.HorizontalPosition;
+import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.builder.components.axle.Axle;
+import dhbw.mosbach.builder.components.axle.Wheel;
+import dhbw.mosbach.builder.components.chassis.TrailerChassis;
+import dhbw.mosbach.builder.components.light.BrakeLight;
+import dhbw.mosbach.builder.components.light.TurnSignal;
+
+public class TrailerBuilder implements TrailerVehicleBuilder {
+
+    TrailerChassis.TrailerChassisBuilder trailerChassisBuilder = new TrailerChassis.TrailerChassisBuilder();
+    Axle[] axles;
+
+    @Override
+    public void buildAxles() {
+        axles = new Axle[2];
+        for (int i = 0; i < axles.length; i++) {
+            Wheel[] wheels = {new Wheel(), new Wheel()};
+            Brake[] brakes = {new Brake(), new Brake()};
+            axles[i] = new Axle(wheels,brakes);
+        }
+        trailerChassisBuilder.setAxles(axles);
+    }
+
+    @Override
+    public void buildChassis() {
+
+
+    }
+    @Override
+    public void buildSensory() {
+        trailerChassisBuilder.setAxles(axles)
+                .setTurnSignals(new TurnSignal[]{
+                        new TurnSignal(Position.LEFT, HorizontalPosition.BACK),
+                        new TurnSignal(Position.RIGHT, HorizontalPosition.BACK)
+                })
+                .setBrakeLights(new BrakeLight[]{
+                        new BrakeLight(Position.LEFT),
+                        new BrakeLight(Position.RIGHT)});
+    }
+
+    @Override
+    public Trailer getVehicle() {
+        return new Trailer(trailerChassisBuilder.createTrailerChassis());
+    }
+}
