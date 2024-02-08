@@ -5,22 +5,33 @@ import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.eventbus.events.EventBrakeLightOff;
 import dhbw.mosbach.eventbus.events.EventBrakeLightOn;
+import dhbw.mosbach.mediator.ITruckMediator;
 
-public class BrakeLight extends ALight {
+public class BrakeLight extends ElectronicComponent {
 
-    public BrakeLight(Position position) {
-        super(position, HorizontalPosition.BACK);
+    public BrakeLight(ITruckMediator mediator, Position position) {
+        super(mediator,position, HorizontalPosition.BACK);
     }
 
     @Subscribe
     public void receive(EventBrakeLightOn brakeLightOn){
-        activate();
+        isOn = true;
         System.out.println("Event triggered");
     }
 
     @Subscribe
     public void receive(EventBrakeLightOff brakeLightOff){
-        deactivate();
+        isOn = false;
         System.out.println("Event triggered");
+    }
+
+    @Override
+    public void activate() {
+        mediator.activate(this);
+    }
+
+    @Override
+    public void deactivate() {
+        mediator.deactivate(this);
     }
 }

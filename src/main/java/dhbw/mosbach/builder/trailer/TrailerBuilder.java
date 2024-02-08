@@ -34,12 +34,12 @@ public class TrailerBuilder implements TrailerVehicleBuilder {
     public void buildSensory() {
         trailerChassisBuilder.setAxles(axles)
                 .setTurnSignals(new TurnSignal[]{
-                        new TurnSignal(Position.LEFT, HorizontalPosition.BACK),
-                        new TurnSignal(Position.RIGHT, HorizontalPosition.BACK)
+                        new TurnSignal(null,Position.LEFT, HorizontalPosition.BACK),
+                        new TurnSignal(null,Position.RIGHT, HorizontalPosition.BACK)
                 })
                 .setBrakeLights(new BrakeLight[]{
-                        new BrakeLight(Position.LEFT),
-                        new BrakeLight(Position.RIGHT)});
+                        new BrakeLight(null,Position.LEFT),
+                        new BrakeLight(null,Position.RIGHT)});
     }
 
     @Override

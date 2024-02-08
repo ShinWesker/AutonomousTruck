@@ -15,7 +15,7 @@ import dhbw.mosbach.command.TurnRight;
 import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.eventbus.ThreePoleConnector;
 import dhbw.mosbach.eventbus.events.EventBrake;
-import dhbw.mosbach.eventbus.events.EventTurnSignalOn;
+import dhbw.mosbach.mediator.TruckMediator;
 import dhbw.mosbach.state.ITruckState;
 import dhbw.mosbach.state.Inactive;
 import lombok.Getter;
@@ -27,14 +27,18 @@ import lombok.Setter;
 public class AutonomousTruck implements IVehicle {
     private final TruckChassis truckChassis;
     private final CentralUnit centralUnit;
+    private final TruckMediator mediator;
     private ThreePoleConnector threePoleConnector;
     private Boolean connected = false;
     private ITruckState state = new Inactive();
 
-    protected AutonomousTruck(TruckChassis truckChassis, CentralUnit centralUnit) {
+    protected AutonomousTruck(TruckChassis truckChassis, CentralUnit centralUnit, TruckMediator mediator) {
         this.truckChassis = truckChassis;
         this.centralUnit = centralUnit;
+        this.mediator = mediator;
         centralUnit.setTruck(this);
+        mediator.setTruck(this);
+
     }
     public void moveStraight(int percentage) {
         System.out.println("Truck moved straight");
@@ -43,7 +47,6 @@ public class AutonomousTruck implements IVehicle {
         System.out.println("Truck turning left");
         centralUnit.setCommand(new TurnSignalOn(truckChassis.getTurnSignals(), Position.LEFT));
         centralUnit.execute();
-        if (Boolean.TRUE.equals(connected)) threePoleConnector.getTurnSignalBus().post(new EventTurnSignalOn(Position.LEFT));
 
         centralUnit.setCommand(new CBrake(truckChassis.getAxles(),25));
         centralUnit.execute();
@@ -56,7 +59,6 @@ public class AutonomousTruck implements IVehicle {
         System.out.println("Truck turning right");
         centralUnit.setCommand(new TurnSignalOn(truckChassis.getTurnSignals(), Position.RIGHT));
         centralUnit.execute();
-        if (Boolean.TRUE.equals(connected)) threePoleConnector.getTurnSignalBus().post(new EventTurnSignalOn(Position.RIGHT));
 
         centralUnit.setCommand(new CBrake(truckChassis.getAxles(),25));
         centralUnit.execute();

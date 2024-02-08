@@ -7,12 +7,12 @@ import dhbw.mosbach.builder.components.chassis.TruckChassis;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.axle.SteeringAxle;
 import dhbw.mosbach.builder.components.axle.Wheel;
-import dhbw.mosbach.builder.components.light.BrakeLight;
-import dhbw.mosbach.builder.components.light.HeadLight;
-import dhbw.mosbach.builder.components.light.TurnSignal;
+import dhbw.mosbach.builder.components.light.*;
 import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.composite.Battery;
+import dhbw.mosbach.mediator.ITruckMediator;
+import dhbw.mosbach.mediator.TruckMediator;
 
 public class TruckBuilder implements TruckVehicleBuilder {
     CentralUnit centralUnit;
@@ -21,12 +21,14 @@ public class TruckBuilder implements TruckVehicleBuilder {
     private Battery battery;
     private Cabine cabine;
     private Coupling coupling;
+    private ITruckMediator mediator;
 
     TruckChassis.TruckChassisBuilder truckChassisBuilder = new TruckChassis.TruckChassisBuilder();
 
 
-    public TruckBuilder(CentralUnit centralUnit){
+    public TruckBuilder(CentralUnit centralUnit, ITruckMediator mediator){
         this.centralUnit = centralUnit;
+        this.mediator = mediator;
     }
     @Override
     public void buildAxles() {
@@ -64,12 +66,12 @@ public class TruckBuilder implements TruckVehicleBuilder {
     @Override
     public void buildCabin() {
         HeadLight[] headLights = {
-                new HeadLight(Position.LEFT),
-                new HeadLight(Position.RIGHT)};
+                new HeadLight(mediator,Position.LEFT),
+                new HeadLight(mediator,Position.RIGHT)};
 
         ExteriorMirror[] exteriorMirrors = {
-                new ExteriorMirror(new Camera(), new Lidar(),Position.LEFT),
-                new ExteriorMirror(new Camera(), new Lidar(),Position.RIGHT)
+                new ExteriorMirror(new Camera(mediator,Position.LEFT), new Lidar(mediator,Position.LEFT),Position.LEFT),
+                new ExteriorMirror(new Camera(mediator,Position.RIGHT), new Lidar(mediator,Position.RIGHT),Position.RIGHT)
         };
         cabine = new Cabine(headLights, exteriorMirrors);
     }
@@ -82,14 +84,14 @@ public class TruckBuilder implements TruckVehicleBuilder {
     public void buildSensory() {
         truckChassisBuilder
                 .setBrakeLights(new BrakeLight[]{
-                        new BrakeLight(Position.LEFT),
-                        new BrakeLight(Position.RIGHT)})
+                        new BrakeLight(mediator,Position.LEFT),
+                        new BrakeLight(mediator,Position.RIGHT)})
 
                 .setTurnSignals(new TurnSignal[]{
-                        new TurnSignal(Position.LEFT, HorizontalPosition.FRONT),
-                        new TurnSignal(Position.LEFT, HorizontalPosition.BACK),
-                        new TurnSignal(Position.RIGHT, HorizontalPosition.FRONT),
-                        new TurnSignal(Position.RIGHT, HorizontalPosition.BACK)
+                        new TurnSignal(mediator,Position.LEFT, HorizontalPosition.FRONT),
+                        new TurnSignal(mediator,Position.LEFT, HorizontalPosition.BACK),
+                        new TurnSignal(mediator,Position.RIGHT, HorizontalPosition.FRONT),
+                        new TurnSignal(mediator,Position.RIGHT, HorizontalPosition.BACK)
                 });
     }
     @Override
@@ -99,6 +101,6 @@ public class TruckBuilder implements TruckVehicleBuilder {
 
     @Override
     public AutonomousTruck getVehicle() {
-        return new AutonomousTruck(truckChassisBuilder.createTruckChassis(), centralUnit);
+        return new AutonomousTruck(truckChassisBuilder.createTruckChassis(), centralUnit, (TruckMediator) mediator);
     }
 }

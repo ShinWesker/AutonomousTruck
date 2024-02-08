@@ -11,9 +11,6 @@ public class BrakeLightOff implements ICommand {
 
     @Override
     public void execute() {
-        for (BrakeLight b : brakeLights
-             ) {
-            b.deactivate();
-        }
+        brakeLights[0].deactivate();
     }
 }

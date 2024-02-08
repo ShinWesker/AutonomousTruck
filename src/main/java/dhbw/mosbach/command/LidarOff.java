@@ -1,6 +1,6 @@
 package dhbw.mosbach.command;
 
-import dhbw.mosbach.builder.components.Lidar;
+import dhbw.mosbach.builder.components.light.Lidar;
 
 public class LidarOff implements  ICommand {
     private final Lidar[] lidars;
@@ -11,9 +11,6 @@ public class LidarOff implements  ICommand {
 
     @Override
     public void execute() {
-        for (Lidar l: lidars
-             ) {
-            l.deactivate();
-        }
+        lidars[0].deactivate();
     }
 }

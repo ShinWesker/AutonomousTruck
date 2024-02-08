@@ -1,6 +1,6 @@
 package dhbw.mosbach.command;
 
-import dhbw.mosbach.builder.components.Camera;
+import dhbw.mosbach.builder.components.light.Camera;
 
 public class CameraOff implements ICommand {
     private final Camera[] cameras;
@@ -11,9 +11,6 @@ public class CameraOff implements ICommand {
 
     @Override
     public void execute() {
-        for (Camera c: cameras
-             ) {
-            c.deactivate();
-        }
+        cameras[0].deactivate();
     }
 }

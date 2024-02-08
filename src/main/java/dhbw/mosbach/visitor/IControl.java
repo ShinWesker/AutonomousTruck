@@ -1,8 +1,8 @@
 package dhbw.mosbach.visitor;
 
-import dhbw.mosbach.builder.components.Camera;
+import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.Engine;
-import dhbw.mosbach.builder.components.Lidar;
+import dhbw.mosbach.builder.components.light.Lidar;
 
 public interface IControl {
     void control(Engine engine);

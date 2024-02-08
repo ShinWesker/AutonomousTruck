@@ -1,4 +1,6 @@
 package dhbw.mosbach.builder.components;
+import dhbw.mosbach.builder.components.light.Camera;
+import dhbw.mosbach.builder.components.light.Lidar;
 import dhbw.mosbach.builder.enums.Position;
 import lombok.Getter;
 

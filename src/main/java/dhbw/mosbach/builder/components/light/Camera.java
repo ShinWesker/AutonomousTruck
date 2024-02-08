@@ -1,19 +1,27 @@
-package dhbw.mosbach.builder.components;
+package dhbw.mosbach.builder.components.light;
 
+import dhbw.mosbach.builder.enums.HorizontalPosition;
+import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.visitor.IControl;
 import dhbw.mosbach.visitor.IPartVisitor;
 import dhbw.mosbach.visitor.IPart;
 
-public class Camera implements IPart {
-
-    private Boolean isOn;
+public class Camera extends ElectronicComponent implements IPart {
     private Defect defect;
-    public void activate(){
-        isOn = true;
+    public Camera(ITruckMediator mediator, Position position) {
+        super(mediator,position, HorizontalPosition.FRONT);
     }
-    public void deactivate(){
-        isOn = false;
+
+    @Override
+    public void activate() {
+        mediator.activate(this);
+    }
+
+    @Override
+    public void deactivate() {
+        mediator.deactivate(this);
     }
 
     @Override

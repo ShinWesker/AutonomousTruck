@@ -1,8 +1,8 @@
 package proxy;
 
-import dhbw.mosbach.builder.components.Camera;
+import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.Engine;
-import dhbw.mosbach.builder.components.Lidar;
+import dhbw.mosbach.builder.components.light.Lidar;
 import dhbw.mosbach.visitor.IPartVisitor;
 
 public class Robot implements IPartVisitor {

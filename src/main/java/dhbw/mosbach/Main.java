@@ -4,6 +4,7 @@ import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
 import dhbw.mosbach.builder.components.*;
+import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
@@ -18,14 +19,17 @@ import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.cor.ServiceCenter;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
+import dhbw.mosbach.mediator.ITruckMediator;
+import dhbw.mosbach.mediator.TruckMediator;
 
 public class Main {
     public static void main(String[] args) {
 
         CentralUnit centralUnit = new CentralUnit();
+        ITruckMediator mediator = new TruckMediator();
 
         // Builder
-        TruckVehicleBuilder truckBuilder = new TruckBuilder(centralUnit);
+        TruckVehicleBuilder truckBuilder = new TruckBuilder(centralUnit, mediator);
         VehicleDirector<AutonomousTruck, TruckVehicleBuilder> truckDirector = new TruckDirector();
         AutonomousTruck autonomousTruck = truckDirector.build(truckBuilder);
 
@@ -80,11 +84,10 @@ public class Main {
         Defect defect1 = Defect.E02;
         ServiceCenter serviceCenter = new ServiceCenter();
 
-        Camera camera = new Camera();
+        Camera camera = new Camera(mediator,Position.RIGHT);
 
         serviceCenter.handleDefect(defect, engine);
         serviceCenter.handleDefect(defect1, camera);
-
 
     }
 }

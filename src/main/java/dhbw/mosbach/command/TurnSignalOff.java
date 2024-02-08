@@ -3,6 +3,8 @@ package dhbw.mosbach.command;
 import dhbw.mosbach.builder.components.light.TurnSignal;
 import dhbw.mosbach.builder.enums.Position;
 
+import java.util.Arrays;
+
 public class TurnSignalOff implements ICommand {
     private final TurnSignal[] turnSignals;
     private final Position position;
@@ -14,9 +16,9 @@ public class TurnSignalOff implements ICommand {
 
     @Override
     public void execute() {
-        for (TurnSignal t: turnSignals
-        ) {
-            if (t.getPosition() == position) t.deactivate();
-        }
+        Arrays.stream(turnSignals)
+                .filter(turnSignal -> turnSignal.getPosition() == position)
+                .findFirst()
+                .ifPresent(TurnSignal::deactivate);
     }
 }
