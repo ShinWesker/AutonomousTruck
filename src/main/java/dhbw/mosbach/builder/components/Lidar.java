@@ -25,7 +25,7 @@ public class Lidar implements IPart {
                 HashCode: %d
                 """,
                 this.getClass().getSimpleName(),
-                isOn ? "On" : "Off",
+                Boolean.TRUE.equals(isOn) ? "On" : "Off",
                 this.hashCode());
     }
 

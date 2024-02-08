@@ -14,6 +14,6 @@ public class ServiceCenter {
     }
 
     public void handleDefect(Defect defect, IPart part){
-        sensoryTeam.reparDefect(defect, part);
+        sensoryTeam.repairDefect(defect, part);
     }
 }

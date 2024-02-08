@@ -13,12 +13,13 @@ public class MotorTeam extends ATeam {
         canHandle.add(Defect.E03);
     }
 
-    public void reparDefect(Defect defect, IPart part) {
+    @Override
+    public void repairDefect(Defect defect, IPart part) {
         if (canHandleDefect(defect,canHandle)) {
             System.out.println( this.getClass().getSimpleName()+ " Can handle this: " + defect);
             supervisor.delegate(part);
         } else{
-            super.reparDefect(defect,part);
+            super.repairDefect(defect,part);
         }
 
     }

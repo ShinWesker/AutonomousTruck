@@ -31,7 +31,7 @@ public abstract class ALight {
                 HashCode: %d
                 """,
                 this.getClass().getSimpleName(),
-                isOn ? "On" : "Off",
+                Boolean.TRUE.equals(isOn) ? "On" : "Off",
                 this.hashCode());
     }
 }

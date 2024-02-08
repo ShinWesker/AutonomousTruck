@@ -11,7 +11,7 @@ public class Pivot {
     Boolean status;
 
     public Pivot(Boolean status){
-        this.status = false;
+        this.status = status;
     }
 
 }

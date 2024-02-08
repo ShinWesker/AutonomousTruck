@@ -3,7 +3,6 @@ package dhbw.mosbach.builder.components.light;
 import com.google.common.eventbus.Subscribe;
 import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
-import dhbw.mosbach.eventbus.events.EventBrake;
 import dhbw.mosbach.eventbus.events.EventBrakeLightOff;
 import dhbw.mosbach.eventbus.events.EventBrakeLightOn;
 

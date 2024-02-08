@@ -5,7 +5,7 @@ import dhbw.mosbach.visitor.IPart;
 import java.util.Random;
 
 public abstract class TeamManager extends TeamMember {
-    public TeamManager() {
+    protected TeamManager() {
         super();
     }
 

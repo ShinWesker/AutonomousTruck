@@ -7,6 +7,12 @@ public class TechnicalEngineer extends TeamManager {
 
     private IPart part;
 
+    @Override
+    public void addUnit(TeamMember teamMember) {
+        super.addUnit(teamMember);
+    }
+
+    @Override
     public String getPassword() {
         return parent.getPassword();
     }
