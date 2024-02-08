@@ -15,7 +15,7 @@ import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.composite.Battery;
 
 public class TruckBuilder implements TruckVehicleBuilder {
-    CentralUnit centralUnit = new CentralUnit();
+    CentralUnit centralUnit;
     private Axle[] axles;
     private SteeringAxle steeringAxle;
     private Battery battery;
@@ -24,6 +24,10 @@ public class TruckBuilder implements TruckVehicleBuilder {
 
     TruckChassis.TruckChassisBuilder truckChassisBuilder = new TruckChassis.TruckChassisBuilder();
 
+
+    public TruckBuilder(CentralUnit centralUnit){
+        this.centralUnit = centralUnit;
+    }
     @Override
     public void buildAxles() {
         axles = new Axle[2];

@@ -1,7 +1,7 @@
 package dhbw.mosbach.cor.composite;
 
+import dhbw.mosbach.proxy.ProxyAccess;
 import dhbw.mosbach.visitor.IPart;
-import proxy.ProxyAccess;
 
 public class TechnicalEngineer extends TeamManager {
 

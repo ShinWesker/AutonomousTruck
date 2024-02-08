@@ -14,16 +14,19 @@ import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.builder.truck.TruckVehicleBuilder;
-import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.cor.ServiceCenter;
+import dhbw.mosbach.key.ElectronicKey;
+import dhbw.mosbach.key.ReceiverModule;
 
 public class Main {
     public static void main(String[] args) {
 
+        CentralUnit centralUnit = new CentralUnit();
+
         // Builder
-        TruckVehicleBuilder truckBuilder = new TruckBuilder();
+        TruckVehicleBuilder truckBuilder = new TruckBuilder(centralUnit);
         VehicleDirector<AutonomousTruck, TruckVehicleBuilder> truckDirector = new TruckDirector();
         AutonomousTruck autonomousTruck = truckDirector.build(truckBuilder);
 
@@ -45,22 +48,6 @@ public class Main {
 
         trailer.load(new Pallet("banana"), 1);
 
-
-
-        /*
-        //Command Pattern test
-        TurnSignal[] turnSignals = new TurnSignal[3];
-        TurnSignal turnSignal = new TurnSignal(Position.RIGHT);
-        TurnSignal turnSignal1 = new TurnSignal(Position.RIGHT);
-        TurnSignal turnSignal2 = new TurnSignal(Position.RIGHT);
-        turnSignals[0] = turnSignal;
-        turnSignals[1] = turnSignal1;
-        turnSignals[2] = turnSignal2;
-
-        CentralUnit centralUnit = new CentralUnit();
-        centralUnit.setCommand(new TurnSignalOn(turnSignals));
-        centralUnit.execute();
-
         // Key Test
         ReceiverModule receiverModule = new ReceiverModule(centralUnit);
         ElectronicKey key = new ElectronicKey("Kodiak2024", receiverModule);
@@ -77,7 +64,6 @@ public class Main {
         holdingArea.getSensor().addListener(centralUnit);
         holdingArea.load(pallet);
 
-        trailer = new Trailer();
         Coupling coupling = new Coupling();
         coupling.getSensor().addListener(centralUnit);
         coupling.connect(trailer);
@@ -99,8 +85,6 @@ public class Main {
 
         serviceCenter.handleDefect(defect, engine);
         serviceCenter.handleDefect(defect1, camera);
-
-        */
 
 
     }

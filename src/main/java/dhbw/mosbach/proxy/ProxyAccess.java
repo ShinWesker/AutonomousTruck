@@ -1,11 +1,7 @@
-package proxy;
-
+package dhbw.mosbach.proxy;
 import dhbw.mosbach.cor.composite.TechnicalEngineer;
-import dhbw.mosbach.visitor.IPart;
 
-import java.util.Objects;
-
-public enum ProxyAccess implements IAccess {
+public enum ProxyAccess implements proxy.IAccess {
     INSTANCE;
     @Override
     public void grant(TechnicalEngineer technicalEngineer) {
