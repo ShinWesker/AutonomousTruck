@@ -4,7 +4,6 @@ import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
 import dhbw.mosbach.builder.components.*;
-import dhbw.mosbach.builder.components.light.TurnSignal;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
