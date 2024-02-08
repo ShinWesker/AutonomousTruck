@@ -7,7 +7,9 @@ import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.HeadLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
+import dhbw.mosbach.eventbus.events.EventBrakeLightOff;
 import dhbw.mosbach.eventbus.events.EventBrakeLightOn;
+import dhbw.mosbach.eventbus.events.EventTurnSignalOff;
 import dhbw.mosbach.eventbus.events.EventTurnSignalOn;
 import lombok.Setter;
 
@@ -98,13 +100,23 @@ public class TruckMediator implements ITruckMediator {
                 turnOffComponents(lidars);
                 break;
             case TurnSignal turnSignal:
-                turnOffComponents(turnSignals);
+                for (TurnSignal t : turnSignals){
+                    if (t.getPosition() == turnSignal.getPosition()) {
+                        t.setIsOn(false);
+                    }
+                }
+                if (truck.getConnected()) {
+                    truck.getThreePoleConnector().getTurnSignalBus().post(new EventTurnSignalOff(turnSignal.getPosition()));
+                }
                 break;
             case HeadLight headLight:
                 turnOffComponents(headLights);
                 break;
             case BrakeLight brakeLight:
                 turnOffComponents(brakeLights);
+                if (truck.getConnected()) {
+                    truck.getThreePoleConnector().getBrakeLightBus().post(new EventBrakeLightOff());
+                }
             default:
                 throw new IllegalStateException("Unexpected value: " + electronicComponent);
         }

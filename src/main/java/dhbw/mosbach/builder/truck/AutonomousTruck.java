@@ -27,7 +27,6 @@ import lombok.Setter;
 public class AutonomousTruck implements IVehicle {
     private final TruckChassis truckChassis;
     private final CentralUnit centralUnit;
-    private final TruckMediator mediator;
     private ThreePoleConnector threePoleConnector;
     private Boolean connected = false;
     private ITruckState state = new Inactive();
@@ -35,10 +34,8 @@ public class AutonomousTruck implements IVehicle {
     protected AutonomousTruck(TruckChassis truckChassis, CentralUnit centralUnit, TruckMediator mediator) {
         this.truckChassis = truckChassis;
         this.centralUnit = centralUnit;
-        this.mediator = mediator;
         centralUnit.setTruck(this);
         mediator.setTruck(this);
-
     }
     public void moveStraight(int percentage) {
         System.out.println("Truck moved straight");

@@ -15,7 +15,6 @@ public class Trailer implements IVehicle {
         this.trailerChassis = trailerChassis;
 
     }
-
     public void load(Pallet pallet, int index){
         trailerChassis.load(pallet,index);
     }
