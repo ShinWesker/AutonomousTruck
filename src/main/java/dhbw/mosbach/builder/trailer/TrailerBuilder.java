@@ -11,12 +11,14 @@ import dhbw.mosbach.builder.components.light.TurnSignal;
 
 public class TrailerBuilder implements TrailerVehicleBuilder {
 
-    TrailerChassis.TrailerChassisBuilder trailerChassisBuilder = new TrailerChassis.TrailerChassisBuilder();
-    Axle[] axles;
-
+    TrailerChassis.TrailerChassisBuilder trailerChassisBuilder;
+    @Override
+    public void buildChassis() {
+        trailerChassisBuilder = new TrailerChassis.TrailerChassisBuilder();
+    }
     @Override
     public void buildAxles() {
-        axles = new Axle[2];
+        Axle[] axles = new Axle[2];
         for (int i = 0; i < axles.length; i++) {
             Wheel[] wheels = {new Wheel(), new Wheel()};
             Brake[] brakes = {new Brake(), new Brake()};
@@ -26,13 +28,8 @@ public class TrailerBuilder implements TrailerVehicleBuilder {
     }
 
     @Override
-    public void buildChassis() {
-
-
-    }
-    @Override
     public void buildSensory() {
-        trailerChassisBuilder.setAxles(axles)
+        trailerChassisBuilder
                 .setTurnSignals(new TurnSignal[]{
                         new TurnSignal(null,Position.LEFT, HorizontalPosition.BACK),
                         new TurnSignal(null,Position.RIGHT, HorizontalPosition.BACK)

@@ -25,6 +25,21 @@ public class TrailerChassis extends AChassis {
         this.cargoSpace = new CargoSpace();
     }
 
+    public Boolean checkParts(){
+        boolean cargoSpaceStatus = false;
+        if (cargoSpace != null) {
+            cargoSpaceStatus = true;
+
+            for (HoldingArea holdingArea : cargoSpace.getArea()){
+                if (holdingArea == null) {
+                    cargoSpaceStatus = false;
+                    break;
+                }
+            }
+        }
+        return pivot != null && cargoSpaceStatus;
+    }
+
     public void connect(AutonomousTruck autonomousTruck) {
         pivot.setTruck(autonomousTruck);
 

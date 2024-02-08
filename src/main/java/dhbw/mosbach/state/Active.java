@@ -6,5 +6,6 @@ public class Active implements ITruckState {
     @Override
     public void toggle(AutonomousTruck truck) {
         truck.setState(new Inactive());
+        truck.deactivate();
     }
 }

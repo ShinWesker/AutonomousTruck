@@ -11,6 +11,6 @@ public class EngineStart  implements ICommand{
 
     @Override
     public void execute() {
-        engine.deactivate();
+        engine.activate();
     }
 }

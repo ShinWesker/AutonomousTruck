@@ -71,7 +71,7 @@ public class TruckMediator implements ITruckMediator {
             case TurnSignal turnSignal:
                 for (TurnSignal t : turnSignals){
                     if (t.getPosition() == turnSignal.getPosition()) {
-                        t.setIsOn(true);
+                        t.setStatus(true);
                     }
                 }
                 if (truck.getConnected()) {
@@ -102,7 +102,7 @@ public class TruckMediator implements ITruckMediator {
             case TurnSignal turnSignal:
                 for (TurnSignal t : turnSignals){
                     if (t.getPosition() == turnSignal.getPosition()) {
-                        t.setIsOn(false);
+                        t.setStatus(false);
                     }
                 }
                 if (truck.getConnected()) {
@@ -122,11 +122,11 @@ public class TruckMediator implements ITruckMediator {
         }
     }
     private <T extends ElectronicComponent> void turnOnComponents(Collection<T> components) {
-        components.forEach(component -> component.setIsOn(true));
+        components.forEach(component -> component.setStatus(true));
     }
 
     private <T extends ElectronicComponent> void turnOffComponents(Collection<T> components) {
-        components.forEach(component -> component.setIsOn(false));
+        components.forEach(component -> component.setStatus(false));
     }
 
 

@@ -33,7 +33,7 @@ public class Camera extends ElectronicComponent implements IPart {
                 HashCode: %d
                 """,
                 this.getClass().getSimpleName(),
-                Boolean.TRUE.equals(isOn) ? "On" : "Off",
+                Boolean.TRUE.equals(status) ? "On" : "Off",
                 this.hashCode());
     }
 

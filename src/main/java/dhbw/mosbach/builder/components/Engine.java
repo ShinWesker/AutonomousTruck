@@ -5,7 +5,9 @@ import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.visitor.IControl;
 import dhbw.mosbach.visitor.IPartVisitor;
 import dhbw.mosbach.visitor.IPart;
+import lombok.Getter;
 
+@Getter
 public class Engine implements IPart {
     private Boolean isOn;
     private final TruckBatteryControl control;

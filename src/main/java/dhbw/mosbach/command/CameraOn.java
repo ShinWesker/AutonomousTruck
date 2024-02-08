@@ -3,14 +3,14 @@ package dhbw.mosbach.command;
 import dhbw.mosbach.builder.components.light.Camera;
 
 public class CameraOn implements ICommand {
-    private final Camera[] cameras;
+    private final Camera camera;
 
-    public CameraOn(Camera[] cameras) {
-        this.cameras = cameras;
+    public CameraOn(Camera camera) {
+        this.camera = camera;
     }
 
     @Override
     public void execute() {
-        cameras[0].activate();
+        camera.activate();
     }
 }

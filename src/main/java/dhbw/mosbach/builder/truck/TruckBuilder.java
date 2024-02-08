@@ -25,11 +25,11 @@ public class TruckBuilder implements TruckVehicleBuilder {
 
     TruckChassis.TruckChassisBuilder truckChassisBuilder = new TruckChassis.TruckChassisBuilder();
 
-
     public TruckBuilder(CentralUnit centralUnit, ITruckMediator mediator){
         this.centralUnit = centralUnit;
         this.mediator = mediator;
     }
+
     @Override
     public void buildAxles() {
         axles = new Axle[2];
@@ -43,24 +43,20 @@ public class TruckBuilder implements TruckVehicleBuilder {
             } else {
                 steeringAxle = new SteeringAxle(wheels, brakes);
             }
+            truckChassisBuilder.setSteeringAxle(steeringAxle);
+            truckChassisBuilder.setAxles(axles);
         }
-        truckChassisBuilder.setSteeringAxle(steeringAxle);
-        truckChassisBuilder.setAxles(axles);
     }
 
     @Override
     public void buildChassis() {
         battery = new Battery();
         TruckBatteryControl truckBatteryControl = new TruckBatteryControl(battery);
-
         coupling = new Coupling();
 
-        truckChassisBuilder = new TruckChassis.TruckChassisBuilder()
-                .setAxles(axles)
-                .setSteeringAxle(steeringAxle)
+        truckChassisBuilder
                 .setCoupling(coupling)
                 .setEngine(new Engine(truckBatteryControl));
-
     }
 
     @Override
@@ -69,9 +65,25 @@ public class TruckBuilder implements TruckVehicleBuilder {
                 new HeadLight(mediator,Position.LEFT),
                 new HeadLight(mediator,Position.RIGHT)};
 
+        for (HeadLight headLight : headLights) {
+            mediator.addHeadLight(headLight);
+        }
+
+        Camera cameraLeft = new Camera(mediator, Position.LEFT);
+        Camera cameraRight = new Camera(mediator, Position.RIGHT);
+
+        mediator.addCamera(cameraLeft);
+        mediator.addCamera(cameraRight);
+
+        Lidar lidarLeft = new Lidar(mediator, Position.LEFT);
+        Lidar lidarRight = new Lidar(mediator, Position.RIGHT);
+
+        mediator.addLidar(lidarLeft);
+        mediator.addLidar(lidarRight);
+
         ExteriorMirror[] exteriorMirrors = {
-                new ExteriorMirror(new Camera(mediator,Position.LEFT), new Lidar(mediator,Position.LEFT),Position.LEFT),
-                new ExteriorMirror(new Camera(mediator,Position.RIGHT), new Lidar(mediator,Position.RIGHT),Position.RIGHT)
+                new ExteriorMirror(cameraLeft, lidarLeft, Position.LEFT),
+                new ExteriorMirror(cameraRight, lidarRight, Position.RIGHT)
         };
         cabine = new Cabine(headLights, exteriorMirrors);
     }
@@ -80,20 +92,32 @@ public class TruckBuilder implements TruckVehicleBuilder {
     public void attachCabin() {
         truckChassisBuilder.setCabine(cabine);
     }
+
     @Override
     public void buildSensory() {
-        truckChassisBuilder
-                .setBrakeLights(new BrakeLight[]{
-                        new BrakeLight(mediator,Position.LEFT),
-                        new BrakeLight(mediator,Position.RIGHT)})
+        BrakeLight[] brakeLights = {
+                new BrakeLight(mediator, Position.LEFT),
+                new BrakeLight(mediator, Position.RIGHT)};
 
-                .setTurnSignals(new TurnSignal[]{
-                        new TurnSignal(mediator,Position.LEFT, HorizontalPosition.FRONT),
-                        new TurnSignal(mediator,Position.LEFT, HorizontalPosition.BACK),
-                        new TurnSignal(mediator,Position.RIGHT, HorizontalPosition.FRONT),
-                        new TurnSignal(mediator,Position.RIGHT, HorizontalPosition.BACK)
-                });
+        for (BrakeLight brakeLight : brakeLights) {
+            mediator.addBrakeLight(brakeLight);
+        }
+
+        TurnSignal[] turnSignals = {
+                new TurnSignal(mediator, Position.LEFT, HorizontalPosition.FRONT),
+                new TurnSignal(mediator, Position.LEFT, HorizontalPosition.BACK),
+                new TurnSignal(mediator, Position.RIGHT, HorizontalPosition.FRONT),
+                new TurnSignal(mediator, Position.RIGHT, HorizontalPosition.BACK)};
+
+        for (TurnSignal turnSignal : turnSignals) {
+            mediator.addTurnSignal(turnSignal);
+        }
+
+        truckChassisBuilder
+                .setBrakeLights(brakeLights)
+                .setTurnSignals(turnSignals);
     }
+
     @Override
     public void connectSensory() {
         coupling.getSensor().addListener(centralUnit);

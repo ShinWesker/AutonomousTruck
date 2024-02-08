@@ -4,15 +4,12 @@ import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.components.Brake;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.light.BrakeLight;
+import dhbw.mosbach.builder.components.light.TurnSignal;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.components.chassis.TruckChassis;
-import dhbw.mosbach.builder.components.light.TurnSignal;
 import dhbw.mosbach.builder.IVehicle;
-import dhbw.mosbach.command.CBrake;
-import dhbw.mosbach.command.TurnLeft;
-import dhbw.mosbach.command.TurnRight;
-import dhbw.mosbach.command.TurnSignalOn;
+import dhbw.mosbach.command.*;
 import dhbw.mosbach.eventbus.ThreePoleConnector;
 import dhbw.mosbach.eventbus.events.EventBrake;
 import dhbw.mosbach.mediator.TruckMediator;
@@ -20,7 +17,6 @@ import dhbw.mosbach.state.ITruckState;
 import dhbw.mosbach.state.Inactive;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -34,57 +30,103 @@ public class AutonomousTruck implements IVehicle {
     protected AutonomousTruck(TruckChassis truckChassis, CentralUnit centralUnit, TruckMediator mediator) {
         this.truckChassis = truckChassis;
         this.centralUnit = centralUnit;
-        centralUnit.setTruck(this);
+        this.centralUnit.setTruck(this);
         mediator.setTruck(this);
     }
+
+    public void activate() {
+        executeCommand(new CameraOn(truckChassis.getCabine().getExteriorMirrors()[0].getCamera()));
+        executeCommand(new LidarOn(truckChassis.getCabine().getExteriorMirrors()[0].getLidar()));
+        executeCommand(new EngineStart(truckChassis.getEngine()));
+        moveStraight(0);
+    }
+
+    public void deactivate() {
+        executeCommand(new CameraOff(truckChassis.getCabine().getExteriorMirrors()[0].getCamera()));
+        executeCommand(new LidarOff(truckChassis.getCabine().getExteriorMirrors()[0].getLidar()));
+        executeCommand(new EngineShutDown(truckChassis.getEngine()));
+        moveStraight(0);
+    }
+
     public void moveStraight(int percentage) {
-        System.out.println("Truck moved straight");
+        deactivateTurnSignals();
+        executeCommand(new MoveStraight(truckChassis.getSteeringAxle(), percentage));
     }
+
     public void turnLeft(int degree, int percentage) {
-        System.out.println("Truck turning left");
-        centralUnit.setCommand(new TurnSignalOn(truckChassis.getTurnSignals(), Position.LEFT));
-        centralUnit.execute();
-
-        centralUnit.setCommand(new CBrake(truckChassis.getAxles(),25));
-        centralUnit.execute();
-        if (Boolean.TRUE.equals(connected)) threePoleConnector.getBrakeBus().post(new EventBrake(25));
-
-        centralUnit.setCommand(new TurnLeft(truckChassis.getEngine(),truckChassis.getSteeringAxle(),percentage,degree));
-        centralUnit.execute();
+        turn(Position.LEFT, degree, percentage);
     }
+
     public void turnRight(int degree, int percentage) {
-        System.out.println("Truck turning right");
-        centralUnit.setCommand(new TurnSignalOn(truckChassis.getTurnSignals(), Position.RIGHT));
-        centralUnit.execute();
+        turn(Position.RIGHT, degree, percentage);
+    }
 
-        centralUnit.setCommand(new CBrake(truckChassis.getAxles(),25));
-        centralUnit.execute();
-        if (Boolean.TRUE.equals(connected)) threePoleConnector.getBrakeBus().post(new EventBrake(25));
+    private void turn(Position position, int degree, int percentage) {
+        System.out.println("Truck turning " + position.toString().toLowerCase());
+        activateTurnSignal(position);
+        applyBrakes(25);
+        executeTurn(position, degree, percentage);
+    }
 
-        centralUnit.setCommand(new TurnRight(truckChassis.getEngine(),truckChassis.getSteeringAxle(),percentage,degree));
+    private void activateTurnSignal(Position position) {
+        executeCommand(new TurnSignalOn(truckChassis.getTurnSignals(), position));
+    }
+
+    private void deactivateTurnSignals() {
+        deactivateTurnSignal(Position.LEFT);
+        deactivateTurnSignal(Position.RIGHT);
+    }
+
+    private void deactivateTurnSignal(Position position) {
+        executeCommand(new TurnSignalOff(truckChassis.getTurnSignals(), position));
+    }
+
+    private void applyBrakes(int intensity) {
+        executeCommand(new CBrake(truckChassis.getAxles(), intensity));
+        if (Boolean.TRUE.equals(connected)) {
+            threePoleConnector.getBrakeBus().post(new EventBrake(intensity));
+        }
+    }
+
+    private void executeTurn(Position position, int degree, int percentage) {
+        ICommand turnCommand = position == Position.LEFT ?
+                new TurnLeft(truckChassis.getEngine(), truckChassis.getSteeringAxle(), percentage, degree) :
+                new TurnRight(truckChassis.getEngine(), truckChassis.getSteeringAxle(), percentage, degree);
+        executeCommand(turnCommand);
+    }
+
+    private void executeCommand(ICommand command) {
+        centralUnit.setCommand(command);
         centralUnit.execute();
     }
-    public void changeState(){
+
+    public void changeState() {
         state.toggle(this);
         System.out.println(state.getClass().getSimpleName());
     }
 
     public void connect(Trailer trailer) {
-        this.truckChassis.getCoupling().connect(trailer);
+        truckChassis.getCoupling().connect(trailer);
+        setupThreePoleConnector(trailer);
+    }
+
+    private void setupThreePoleConnector(Trailer trailer) {
         threePoleConnector = new ThreePoleConnector();
         trailer.connect(this);
+        connectComponentsToThreePoleConnector(trailer);
+    }
 
-        for (Axle a : trailer.getTrailerChassis().getAxles()){
-            for (Brake b : a.getBrakes()){
-                threePoleConnector.addSubscriberBrakeBus(b);
+    private void connectComponentsToThreePoleConnector(Trailer trailer) {
+        for (Axle axle : trailer.getTrailerChassis().getAxles()) {
+            for (Brake brake : axle.getBrakes()) {
+                threePoleConnector.addSubscriberBrakeBus(brake);
             }
         }
-        for (BrakeLight b : trailer.getTrailerChassis().getBrakeLights()){
-            threePoleConnector.addSubscriberBrakeLightBus(b);
+        for (BrakeLight brakeLight : trailer.getTrailerChassis().getBrakeLights()) {
+            threePoleConnector.addSubscriberBrakeLightBus(brakeLight);
         }
-
-        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
-            threePoleConnector.addSubscriberTurnSignalBus(t);
+        for (TurnSignal turnSignal : trailer.getTrailerChassis().getTurnSignals()) {
+            threePoleConnector.addSubscriberTurnSignalBus(turnSignal);
         }
     }
 }

@@ -5,8 +5,10 @@ import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.command.ICommand;
 import dhbw.mosbach.key.IEncryption;
+import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.key.SHA256;
 import dhbw.mosbach.observer.ISensoricListener;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -18,8 +20,7 @@ public class CentralUnit implements ISensoricListener {
     private ICommand command;
     private final List<String> loadingPlan = new ArrayList<>();
     @Setter
-    private AutonomousTruck truck = null;
-    private Trailer trailer = null;
+    private AutonomousTruck truck;
     private final IEncryption encryption = new SHA256();
 
     public void execute(){

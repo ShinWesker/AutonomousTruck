@@ -26,14 +26,14 @@ public class TurnSignal extends ElectronicComponent {
     @Subscribe
     public void receive(EventTurnSignalOn eventTurnSignalOn){
         if (position == eventTurnSignalOn.getPosition()) {
-            isOn = true;
+            status = true;
         }
         System.out.println("Event triggered");
     }
     @Subscribe
     public void receive(EventTurnSignalOff eventTurnSignalOff){
         if (position == eventTurnSignalOff.getPosition()) {
-            isOn = false;
+            status = false;
         }
         System.out.println("Event triggered");
     }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public abstract non-sealed class ElectronicComponent implements IElectronicComponent {
     @Setter
-    protected Boolean isOn;
+    protected Boolean status;
     protected Position position;
     protected HorizontalPosition horizontalPosition;
     protected ITruckMediator mediator;
@@ -18,7 +18,7 @@ public abstract non-sealed class ElectronicComponent implements IElectronicCompo
         this.position = position;
         this.horizontalPosition = horizontalPosition;
         this.mediator = mediator;
-        this.isOn = false;
+        this.status = false;
 
     }
     @Override
@@ -30,7 +30,7 @@ public abstract non-sealed class ElectronicComponent implements IElectronicCompo
                 HashCode: %d
                 """,
                 this.getClass().getSimpleName(),
-                Boolean.TRUE.equals(isOn) ? "On" : "Off",
+                Boolean.TRUE.equals(status) ? "On" : "Off",
                 this.hashCode());
     }
 }
