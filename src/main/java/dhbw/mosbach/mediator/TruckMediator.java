@@ -75,6 +75,7 @@ public class TruckMediator implements ITruckMediator {
                     }
                 }
                 if (truck.getConnected()) {
+                    System.out.println("TurnSignal Event!");
                     truck.getThreePoleConnector().getTurnSignalBus().post(new EventTurnSignalOn(turnSignal.getPosition()));
                 }
                 break;
@@ -84,6 +85,7 @@ public class TruckMediator implements ITruckMediator {
             case BrakeLight brakeLight:
                 turnOnComponents(brakeLights);
                 if (truck.getConnected()) {
+                    System.out.println("BrakeLight Event!");
                     truck.getThreePoleConnector().getBrakeLightBus().post(new EventBrakeLightOn());
                 }
                 break;
@@ -107,6 +109,7 @@ public class TruckMediator implements ITruckMediator {
                     }
                 }
                 if (truck.getConnected()) {
+                    System.out.println("TurnSignal Event!");
                     truck.getThreePoleConnector().getTurnSignalBus().post(new EventTurnSignalOff(turnSignal.getPosition()));
                 }
                 break;
@@ -116,6 +119,7 @@ public class TruckMediator implements ITruckMediator {
             case BrakeLight brakeLight:
                 turnOffComponents(brakeLights);
                 if (truck.getConnected()) {
+                    System.out.println("BrakeLight Event!");
                     truck.getThreePoleConnector().getBrakeLightBus().post(new EventBrakeLightOff());
                 }
                 break;

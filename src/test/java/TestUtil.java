@@ -1,7 +1,5 @@
-import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
-import dhbw.mosbach.builder.components.Engine;
 import dhbw.mosbach.builder.components.Pallet;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
@@ -10,13 +8,11 @@ import dhbw.mosbach.builder.trailer.TrailerVehicleBuilder;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
-import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.roles.EmergencyTeamManager;
 import dhbw.mosbach.cor.roles.OperationTeamManager;
 import dhbw.mosbach.cor.roles.Supervisor;
 import dhbw.mosbach.cor.roles.TechnicalEngineer;
 import dhbw.mosbach.mediator.TruckMediator;
-import org.junit.jupiter.api.Test;
 
 public class TestUtil {
 
@@ -32,12 +28,6 @@ public class TestUtil {
         TrailerVehicleBuilder trailerBuilder = new TrailerBuilder();
         VehicleDirector<Trailer, TrailerVehicleBuilder> trailerDirector = new TrailerDirector();
         return trailerDirector.build(trailerBuilder);
-    }
-
-    public Engine createEngine(){
-        Battery battery = new Battery();
-        TruckBatteryControl control = new TruckBatteryControl(battery);
-        return new Engine(control);
     }
 
     public void loadAllItemsIntoTrailer(Trailer trailer) {

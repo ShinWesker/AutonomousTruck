@@ -16,13 +16,11 @@ public class BrakeLight extends ElectronicComponent {
     @Subscribe
     public void receive(EventBrakeLightOn brakeLightOn){
         status = true;
-        System.out.println("Event triggered");
     }
 
     @Subscribe
     public void receive(EventBrakeLightOff brakeLightOff){
         status = false;
-        System.out.println("Event triggered");
     }
 
     @Override

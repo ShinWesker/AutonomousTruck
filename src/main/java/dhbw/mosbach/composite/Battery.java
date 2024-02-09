@@ -25,12 +25,10 @@ public class Battery implements IBattery {
         for (MainCell cell : cells) {
             cell.charge();
         }
-        System.out.println("Battery fully charged.");
     }
 
     @Override
     public void discharge(int amount) {
-        System.out.println("Battery discharged by " + amount);
         for (MainCell cell : cells) {
             if (amount <= 0) break;
             int amountPerMainCell = Math.min(amount, 100 * 5);

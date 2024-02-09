@@ -13,6 +13,5 @@ public class Brake {
     @Subscribe
     public void receive(EventBrake eventBrake){
         this.percentage = eventBrake.getPercentage();
-        System.out.println("Event triggered");
     }
 }

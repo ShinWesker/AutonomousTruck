@@ -87,6 +87,7 @@ public class AutonomousTruck implements IVehicle {
         executeCommand(new BrakeLightOn(truckChassis.getBrakeLights()[0]));
         executeCommand(new CBrake(truckChassis.getAxles(), intensity));
         if (Boolean.TRUE.equals(connected)) {
+            System.out.println("Brake Event");
             threePoleConnector.getBrakeBus().post(new EventBrake(intensity));
         }
     }

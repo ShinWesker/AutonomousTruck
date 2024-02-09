@@ -29,7 +29,7 @@ public class MainCell extends CellConstruct {
     public int countCellsHavingEnergy() {
         int count = 0;
         for (CellConstruct unit : units) {
-            count += unit.countCellsHavingEnergy(); // Sum of all SubCell counts
+            count += unit.countCellsHavingEnergy();
         }
         return count;
     }
