@@ -1,5 +1,4 @@
 import com.google.common.hash.Hashing;
-import dhbw.mosbach.bridge.BatteryControl;
 import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.components.*;
@@ -21,7 +20,6 @@ import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.cor.ServiceCenter;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
-import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
 import dhbw.mosbach.state.Active;
 import dhbw.mosbach.state.Inactive;
@@ -34,7 +32,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
 
 import java.nio.charset.StandardCharsets;
 
@@ -373,7 +370,7 @@ public class Tests {
     @Order(12)
     @DisplayName("Visitor test")
     void visitorTest(){
-        Examiner examiner = spy(new Examiner(new ServiceCenter()));
+        Examiner examiner = spy(new Examiner(new ServiceCenter(null)));
         autonomousTruck = testUtil.createTruck();
 
         //Setting defects for testing purpose
@@ -388,6 +385,13 @@ public class Tests {
         verify(examiner,times(2)).detect(Mockito.any(Lidar.class));
 
         verify(examiner,times(3)).contactServiceTeam(Mockito.any(IPart.class));
+
+    }
+
+    @Test
+    @Order(13)
+    @DisplayName("CoR testing")
+    void CoRTest(){
 
     }
 

@@ -1,19 +1,16 @@
 package dhbw.mosbach.cor;
-
-import dhbw.mosbach.cor.composite.EmergencyTeamManager;
-import dhbw.mosbach.cor.composite.OperationTeamManager;
-import dhbw.mosbach.cor.composite.Supervisor;
 import dhbw.mosbach.visitor.IPart;
+import lombok.Getter;
 
+@Getter
 public class ServiceCenter {
     private final SensoryTeam sensoryTeam;
-
-    public ServiceCenter(){
-        MotorTeam motorTeam = new MotorTeam(new Supervisor("QuatschPassword", new OperationTeamManager()));
-        sensoryTeam = new SensoryTeam(new Supervisor("PasswordOperation", new EmergencyTeamManager()), motorTeam);
+    public ServiceCenter(SensoryTeam sensoryTeam){
+        this.sensoryTeam = sensoryTeam;
     }
-
     public void handleDefect(Defect defect, IPart part){
-        sensoryTeam.repairDefect(defect, part);
+        if (sensoryTeam != null) {
+            sensoryTeam.repairPart(defect, part);
+        }
     }
 }

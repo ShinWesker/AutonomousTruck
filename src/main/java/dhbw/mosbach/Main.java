@@ -16,11 +16,18 @@ import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.builder.truck.TruckVehicleBuilder;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.cor.MotorTeam;
+import dhbw.mosbach.cor.SensoryTeam;
 import dhbw.mosbach.cor.ServiceCenter;
+import dhbw.mosbach.cor.roles.EmergencyTeamManager;
+import dhbw.mosbach.cor.roles.OperationTeamManager;
+import dhbw.mosbach.cor.roles.Supervisor;
+import dhbw.mosbach.cor.roles.TechnicalEngineer;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
+import dhbw.mosbach.visitor.Examiner;
 
 public class Main {
     public static void main(String[] args) {
@@ -79,15 +86,62 @@ public class Main {
 
         control.fillEnergy();
 
+
         // COR + Composite
-        Defect defect = Defect.E03;
-        Defect defect1 = Defect.E02;
-        ServiceCenter serviceCenter = new ServiceCenter();
+        TechnicalEngineer[] technicalEngineers = new TechnicalEngineer[3];
+        technicalEngineers[0] = new TechnicalEngineer();
+        technicalEngineers[1] = new TechnicalEngineer();
+        technicalEngineers[2] = new TechnicalEngineer();
 
-        Camera camera = new Camera(mediator,Position.RIGHT);
+        TechnicalEngineer[] technicalEngineers1 = new TechnicalEngineer[3];
+        technicalEngineers1[0] = new TechnicalEngineer();
+        technicalEngineers1[1] = new TechnicalEngineer();
+        technicalEngineers1[2] = new TechnicalEngineer();
 
-        serviceCenter.handleDefect(defect, engine);
-        serviceCenter.handleDefect(defect1, camera);
+        EmergencyTeamManager emergencyTeamManager = new EmergencyTeamManager(technicalEngineers);
+        OperationTeamManager operationTeamManager = new OperationTeamManager(technicalEngineers1);
+
+        Supervisor supervisor = new Supervisor("PasswordOperation");
+
+        supervisor.setSuccessor(operationTeamManager);
+        operationTeamManager.setSuccessor(emergencyTeamManager);
+
+        operationTeamManager.setParent(supervisor);
+        emergencyTeamManager.setParent(supervisor);
+
+        MotorTeam motorTeam =  new MotorTeam(supervisor);
+
+        TechnicalEngineer[] technicalEngineers2 = new TechnicalEngineer[3];
+        technicalEngineers2[0] = new TechnicalEngineer();
+        technicalEngineers2[1] = new TechnicalEngineer();
+        technicalEngineers2[2] = new TechnicalEngineer();
+
+        TechnicalEngineer[] technicalEngineers3 = new TechnicalEngineer[3];
+        technicalEngineers3[0] = new TechnicalEngineer();
+        technicalEngineers3[1] = new TechnicalEngineer();
+        technicalEngineers3[2] = new TechnicalEngineer();
+
+        EmergencyTeamManager emergencyTeamManager1 = new EmergencyTeamManager(technicalEngineers2);
+        OperationTeamManager operationTeamManager1 = new OperationTeamManager(technicalEngineers3);
+
+        Supervisor supervisor1 = new Supervisor("PasswordOperation");
+
+        supervisor1.setSuccessor(operationTeamManager1);
+        operationTeamManager1.setSuccessor(emergencyTeamManager1);
+        SensoryTeam sensoryTeam = new SensoryTeam(supervisor1);
+
+        operationTeamManager1.setParent(supervisor);
+        emergencyTeamManager1.setParent(supervisor);
+
+        sensoryTeam.setSuccessor(motorTeam);
+
+        ServiceCenter serviceCenter = new ServiceCenter(sensoryTeam);
+        Camera camera = new Camera(mediator,Position.LEFT);
+
+        serviceCenter.handleDefect(Defect.E01, camera);
+
+        autonomousTruck.examineParts(new Examiner(serviceCenter));
+
 
     }
 }

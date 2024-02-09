@@ -1,7 +1,8 @@
 package dhbw.mosbach.proxy;
-import dhbw.mosbach.cor.composite.TechnicalEngineer;
 
-public enum ProxyAccess implements proxy.IAccess {
+import dhbw.mosbach.cor.roles.TechnicalEngineer;
+
+public enum ProxyAccess implements IAccess {
     INSTANCE;
     @Override
     public void grant(TechnicalEngineer technicalEngineer) {

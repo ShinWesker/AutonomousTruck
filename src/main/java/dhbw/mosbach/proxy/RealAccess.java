@@ -1,8 +1,8 @@
 package dhbw.mosbach.proxy;
 
-import dhbw.mosbach.cor.composite.TechnicalEngineer;
+import dhbw.mosbach.cor.roles.TechnicalEngineer;
 
-public class RealAccess implements proxy.IAccess {
+public class RealAccess implements IAccess {
     proxy.Robot robot = new proxy.Robot();
     @Override
     public void grant(TechnicalEngineer technicalEngineer) {

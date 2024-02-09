@@ -1,33 +1,29 @@
 package dhbw.mosbach.cor;
 
-import dhbw.mosbach.cor.composite.Supervisor;
+import dhbw.mosbach.cor.roles.Supervisor;
 import dhbw.mosbach.visitor.IPart;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-
+@Getter
+@Setter
 public abstract class ATeam {
-
-    @Getter
-    @Setter
-    private ATeam succesor;
+    private ATeam successor;
     protected final Supervisor supervisor;
 
     protected ATeam(Supervisor supervisor) {
         this.supervisor = supervisor;
     }
-
-    public boolean canHandleDefect(Defect defect, List<Defect> canHandle){
-        return canHandle.contains(defect);
+    public boolean canHandlePart(IPart part, List<String> canHandleParts){
+        return canHandleParts.contains(part.getClass().getSimpleName());
     }
 
-    public void repairDefect(Defect defect, IPart part){
-        if (getSuccesor() != null) {
-            getSuccesor().repairDefect(defect, part);
+    public void repairPart(Defect defect, IPart part){
+        if (getSuccessor() != null) {
+            getSuccessor().repairPart(defect, part);
         } else{
             System.out.println("unable to repair defect");
         }
     }
-
 }
