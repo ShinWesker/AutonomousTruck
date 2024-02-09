@@ -3,7 +3,9 @@ package dhbw.mosbach.visitor;
 import dhbw.mosbach.cor.Defect;
 
 public interface IPart {
-    void accept(IPartVisitor iPartVisitor);
+    void acceptPartVisitor(IPartVisitor iPartVisitor);
     void repair();
-    Defect control(IControl control);
+    void acceptControl(IControlVisitor control);
+    Defect getDefect();
+    void setDefect(Defect defect);
 }

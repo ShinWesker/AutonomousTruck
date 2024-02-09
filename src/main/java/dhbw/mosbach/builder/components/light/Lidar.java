@@ -4,10 +4,15 @@ import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.mediator.ITruckMediator;
-import dhbw.mosbach.visitor.IControl;
+import dhbw.mosbach.visitor.DefectUtils;
+import dhbw.mosbach.visitor.IControlVisitor;
 import dhbw.mosbach.visitor.IPartVisitor;
 import dhbw.mosbach.visitor.IPart;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Lidar extends ElectronicComponent implements IPart {
     private Defect defect;
 
@@ -17,11 +22,19 @@ public class Lidar extends ElectronicComponent implements IPart {
 
     @Override
     public void activate() {
+        if (DefectUtils.checkDefect(this)) {
+            DefectUtils.printDefect(this);
+            return;
+        }
         mediator.activate(this);
     }
 
     @Override
     public void deactivate() {
+        if (DefectUtils.checkDefect(this)) {
+            DefectUtils.printDefect(this);
+            return;
+        }
         mediator.deactivate(this);
     }
 
@@ -39,7 +52,7 @@ public class Lidar extends ElectronicComponent implements IPart {
     }
 
     @Override
-    public void accept(IPartVisitor iPartVisitor) {
+    public void acceptPartVisitor(IPartVisitor iPartVisitor) {
         iPartVisitor.repair(this);
     }
 
@@ -50,7 +63,7 @@ public class Lidar extends ElectronicComponent implements IPart {
     }
 
     @Override
-    public Defect control(IControl control) {
-        return defect;
+    public void acceptControl(IControlVisitor control) {
+        control.detect(this);
     }
 }

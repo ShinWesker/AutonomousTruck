@@ -4,8 +4,8 @@ import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.Engine;
 import dhbw.mosbach.builder.components.light.Lidar;
 
-public interface IControl {
-    void control(Engine engine);
-    void control(Camera camera);
-    void control(Lidar lidar);
+public interface IControlVisitor {
+    void detect(Engine engine);
+    void detect(Camera camera);
+    void detect(Lidar lidar);
 }

@@ -5,6 +5,8 @@ import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.light.BrakeLight;
+import dhbw.mosbach.builder.components.light.Camera;
+import dhbw.mosbach.builder.components.light.Lidar;
 import dhbw.mosbach.builder.components.light.TurnSignal;
 import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
@@ -15,12 +17,16 @@ import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.command.BrakeLightOn;
 import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.composite.Battery;
+import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.cor.ServiceCenter;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
 import dhbw.mosbach.state.Active;
 import dhbw.mosbach.state.Inactive;
+import dhbw.mosbach.visitor.Examiner;
+import dhbw.mosbach.visitor.IPart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -28,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
+import org.mockito.internal.matchers.Any;
 
 import java.nio.charset.StandardCharsets;
 
@@ -360,6 +367,28 @@ public class Tests {
         engine.move(speed);
 
         assertEquals(expectedChargeRate, fullChargeRate - battery.getChargeRate());
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Visitor test")
+    void visitorTest(){
+        Examiner examiner = spy(new Examiner(new ServiceCenter()));
+        autonomousTruck = testUtil.createTruck();
+
+        //Setting defects for testing purpose
+        autonomousTruck.getTruckChassis().getEngine().setDefect(Defect.E03);
+        autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[0].getCamera().setDefect(Defect.E02);
+        autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[1].getLidar().setDefect(Defect.E01);
+
+        autonomousTruck.examineParts(examiner);
+
+        verify(examiner,times(1)).detect(Mockito.any(Engine.class));
+        verify(examiner,times(2)).detect(Mockito.any(Camera.class));
+        verify(examiner,times(2)).detect(Mockito.any(Lidar.class));
+
+        verify(examiner,times(3)).contactServiceTeam(Mockito.any(IPart.class));
+
     }
 
 }

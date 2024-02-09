@@ -2,6 +2,7 @@ package dhbw.mosbach.builder.truck;
 
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.components.Brake;
+import dhbw.mosbach.builder.components.ExteriorMirror;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
@@ -15,6 +16,7 @@ import dhbw.mosbach.eventbus.events.EventBrake;
 import dhbw.mosbach.mediator.TruckMediator;
 import dhbw.mosbach.state.ITruckState;
 import dhbw.mosbach.state.Inactive;
+import dhbw.mosbach.visitor.Examiner;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -127,6 +129,15 @@ public class AutonomousTruck implements IVehicle {
         }
         for (TurnSignal turnSignal : trailer.getTrailerChassis().getTurnSignals()) {
             threePoleConnector.addSubscriberTurnSignalBus(turnSignal);
+        }
+    }
+
+    public void examineParts(Examiner examiner){
+        truckChassis.getEngine().acceptControl(examiner);
+
+        for (ExteriorMirror mirror : truckChassis.getCabine().getExteriorMirrors()){
+            mirror.getCamera().acceptControl(examiner);
+            mirror.getLidar().acceptControl(examiner);
         }
     }
 }
