@@ -1,9 +1,8 @@
 import com.google.common.hash.Hashing;
+import dhbw.mosbach.bridge.BatteryControl;
+import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
-import dhbw.mosbach.builder.components.Brake;
-import dhbw.mosbach.builder.components.ExteriorMirror;
-import dhbw.mosbach.builder.components.HoldingArea;
-import dhbw.mosbach.builder.components.Pallet;
+import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
@@ -15,6 +14,7 @@ import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.command.BrakeLightOn;
 import dhbw.mosbach.command.TurnSignalOn;
+import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.mediator.ITruckMediator;
@@ -25,6 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
 import java.nio.charset.StandardCharsets;
@@ -247,7 +249,7 @@ public class Tests {
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     @DisplayName("Truck driving left")
     void truckLeftDriving(){
         autonomousTruck = testUtil.createTruck();
@@ -291,7 +293,7 @@ public class Tests {
     }
 
     @Test
-    @Order(8)
+    @Order(10)
     @DisplayName("Truck driving right")
     void truckRightDriving(){
         autonomousTruck = testUtil.createTruck();
@@ -333,4 +335,31 @@ public class Tests {
 
         assertEquals(50 ,autonomousTruck.getTruckChassis().getEngine().getSpeed());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "10, 20",
+            "20, 40",
+            "30, 60",
+            "40, 80",
+            "50, 100",
+            "60, 120",
+            "70, 140",
+            "80, 160",
+            "90, 180",
+            "100, 200"
+    })
+    @Order(11)
+    @DisplayName("Energy usage test with different speeds")
+    void energyUsageTest(int speed, int expectedChargeRate) {
+        Battery battery = new Battery();
+        TruckBatteryControl batteryControl = new TruckBatteryControl(battery);
+        Engine engine = new Engine(batteryControl);
+        int fullChargeRate = battery.getChargeRate();
+
+        engine.move(speed);
+
+        assertEquals(expectedChargeRate, fullChargeRate - battery.getChargeRate());
+    }
+
 }

@@ -23,4 +23,15 @@ public class SubCell extends CellConstruct {
         }
     }
 
+    @Override
+    public int countCellsHavingEnergy() {
+        int count = 0;
+        for (CellConstruct unit : units) {
+            if (((Cell)unit).hasEnergy()) { // Safe cast since SubCell only contains Cell instances
+                count++;
+            }
+        }
+        return count;
+    }
+
 }

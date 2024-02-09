@@ -19,6 +19,11 @@ public class Cell extends CellConstruct {
         }
     }
 
+    @Override
+    public int countCellsHavingEnergy() {
+        return energy ? 1 : 0;
+    }
+
     public boolean hasEnergy() {
         return energy;
     }

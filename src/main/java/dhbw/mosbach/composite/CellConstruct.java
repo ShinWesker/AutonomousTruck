@@ -14,4 +14,5 @@ public abstract class CellConstruct {
     }
     public abstract void charge();
     public abstract void discharge(int amount);
+    public abstract int countCellsHavingEnergy();
 }

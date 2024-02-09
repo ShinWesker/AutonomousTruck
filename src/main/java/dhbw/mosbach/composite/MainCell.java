@@ -24,4 +24,13 @@ public class MainCell extends CellConstruct {
             amount -= amountPerSubCell;
         }
     }
+
+    @Override
+    public int countCellsHavingEnergy() {
+        int count = 0;
+        for (CellConstruct unit : units) {
+            count += unit.countCellsHavingEnergy(); // Sum of all SubCell counts
+        }
+        return count;
+    }
 }

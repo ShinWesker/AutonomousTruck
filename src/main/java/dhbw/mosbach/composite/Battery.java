@@ -11,6 +11,15 @@ public class Battery implements IBattery {
             cells[i] = new MainCell();
         }
     }
+
+    public int getChargeRate() {
+        int totalEnergyCells = 0;
+        for (MainCell cell : cells) {
+            totalEnergyCells += cell.countCellsHavingEnergy();
+        }
+        return totalEnergyCells;
+    }
+
     @Override
     public void charge() {
         for (MainCell cell : cells) {

@@ -27,7 +27,7 @@ public class Engine implements IPart {
 
     public void move(int amount){
         speed = amount;
-        control.takeEnergy(amount);
+        control.takeEnergy(amount * 2);
     }
 
     @Override
