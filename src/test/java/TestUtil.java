@@ -11,7 +11,12 @@ import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.composite.Battery;
+import dhbw.mosbach.cor.roles.EmergencyTeamManager;
+import dhbw.mosbach.cor.roles.OperationTeamManager;
+import dhbw.mosbach.cor.roles.Supervisor;
+import dhbw.mosbach.cor.roles.TechnicalEngineer;
 import dhbw.mosbach.mediator.TruckMediator;
+import org.junit.jupiter.api.Test;
 
 public class TestUtil {
 
@@ -40,5 +45,29 @@ public class TestUtil {
         for (int i = 0; i < fruits.length; i++) {
             trailer.load(new Pallet(fruits[i]), i);
         }
+    }
+
+    public Supervisor createTeamWithMockedEngineers(TechnicalEngineer mockOperation, TechnicalEngineer mockEmergency){
+        TechnicalEngineer[] technicalEmergency = new TechnicalEngineer[3];
+        technicalEmergency[0] = mockEmergency;
+        technicalEmergency[1] = mockEmergency;
+        technicalEmergency[2] = mockEmergency;
+
+        TechnicalEngineer[] technicalOperation = new TechnicalEngineer[3];
+        technicalOperation[0] = mockOperation;
+        technicalOperation[1] = mockOperation;
+        technicalOperation[2] = mockOperation;
+
+        EmergencyTeamManager emergencyTeamManager = new EmergencyTeamManager(technicalEmergency);
+        OperationTeamManager operationTeamManager = new OperationTeamManager(technicalOperation);
+
+        Supervisor supervisor = new Supervisor("PasswordOperation");
+
+        supervisor.setSuccessor(operationTeamManager);
+        operationTeamManager.setSuccessor(emergencyTeamManager);
+        operationTeamManager.setParent(supervisor);
+        emergencyTeamManager.setParent(supervisor);
+
+        return supervisor;
     }
 }

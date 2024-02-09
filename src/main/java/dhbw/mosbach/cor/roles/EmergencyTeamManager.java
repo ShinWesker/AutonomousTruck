@@ -3,6 +3,8 @@ package dhbw.mosbach.cor.roles;
 import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.visitor.IPart;
 
+import java.util.Random;
+
 public class EmergencyTeamManager extends TeamMember {
     TechnicalEngineer[] technicalEngineers;
     public EmergencyTeamManager (TechnicalEngineer[] technicalEngineers){
@@ -20,7 +22,9 @@ public class EmergencyTeamManager extends TeamMember {
     public String getPassword() {
         return parent.getPassword();
     }
-    public void repair(IPart part){
-        technicalEngineers[0].repair(part, getPassword());
+    public void repair(IPart part) {
+        Random random = new Random();
+        int engineerIndex = random.nextInt(technicalEngineers.length);
+        technicalEngineers[engineerIndex].repair(part, getPassword());
     }
 }

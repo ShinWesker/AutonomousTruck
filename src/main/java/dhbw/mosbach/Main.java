@@ -88,24 +88,19 @@ public class Main {
 
 
         // COR + Composite
-        TechnicalEngineer[] technicalEngineers = new TechnicalEngineer[3];
-        technicalEngineers[0] = new TechnicalEngineer();
-        technicalEngineers[1] = new TechnicalEngineer();
-        technicalEngineers[2] = new TechnicalEngineer();
+        TechnicalEngineer[] technicalEmergency = new TechnicalEngineer[1];
+        technicalEmergency[0] = new TechnicalEngineer();
 
-        TechnicalEngineer[] technicalEngineers1 = new TechnicalEngineer[3];
-        technicalEngineers1[0] = new TechnicalEngineer();
-        technicalEngineers1[1] = new TechnicalEngineer();
-        technicalEngineers1[2] = new TechnicalEngineer();
+        TechnicalEngineer[] technicalOperation = new TechnicalEngineer[1];
+        technicalOperation[0] = new TechnicalEngineer();
 
-        EmergencyTeamManager emergencyTeamManager = new EmergencyTeamManager(technicalEngineers);
-        OperationTeamManager operationTeamManager = new OperationTeamManager(technicalEngineers1);
+        EmergencyTeamManager emergencyTeamManager = new EmergencyTeamManager(technicalEmergency);
+        OperationTeamManager operationTeamManager = new OperationTeamManager(technicalOperation);
 
         Supervisor supervisor = new Supervisor("PasswordOperation");
 
         supervisor.setSuccessor(operationTeamManager);
         operationTeamManager.setSuccessor(emergencyTeamManager);
-
         operationTeamManager.setParent(supervisor);
         emergencyTeamManager.setParent(supervisor);
 

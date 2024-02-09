@@ -17,7 +17,10 @@ import dhbw.mosbach.command.BrakeLightOn;
 import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.cor.MotorTeam;
+import dhbw.mosbach.cor.SensoryTeam;
 import dhbw.mosbach.cor.ServiceCenter;
+import dhbw.mosbach.cor.roles.TechnicalEngineer;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.mediator.TruckMediator;
@@ -373,7 +376,6 @@ public class Tests {
         Examiner examiner = spy(new Examiner(new ServiceCenter(null)));
         autonomousTruck = testUtil.createTruck();
 
-        //Setting defects for testing purpose
         autonomousTruck.getTruckChassis().getEngine().setDefect(Defect.E03);
         autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[0].getCamera().setDefect(Defect.E02);
         autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[1].getLidar().setDefect(Defect.E01);
@@ -392,6 +394,44 @@ public class Tests {
     @Order(13)
     @DisplayName("CoR testing")
     void CoRTest(){
+        TechnicalEngineer mockEmergencyEngineerMO = mock(TechnicalEngineer.class);
+        TechnicalEngineer mockOperationEngineerMO = mock(TechnicalEngineer.class);
+        TechnicalEngineer mockEmergencyEngineerSE = mock(TechnicalEngineer.class);
+        TechnicalEngineer mockOperationEngineerSE = mock(TechnicalEngineer.class);
+
+        MotorTeam motorTeam = new MotorTeam(testUtil.createTeamWithMockedEngineers(mockOperationEngineerMO,mockEmergencyEngineerMO));
+        SensoryTeam sensoryTeam = new SensoryTeam(testUtil.createTeamWithMockedEngineers(mockOperationEngineerSE,mockEmergencyEngineerSE));
+        sensoryTeam.setSuccessor(motorTeam);
+
+        Engine engine = new Engine(null);
+        Lidar lidar = new Lidar(null,null);
+        Camera camera = new Camera(null,null);
+
+        ServiceCenter serviceCenter = new ServiceCenter(sensoryTeam);
+
+        serviceCenter.handleDefect(Defect.E01, engine);
+        serviceCenter.handleDefect(Defect.E02, engine);
+        serviceCenter.handleDefect(Defect.E03, engine);
+        verify(mockOperationEngineerMO, times(2)).repair(Mockito.any(Engine.class),any());
+        verify(mockEmergencyEngineerMO, times(1)).repair(Mockito.any(Engine.class),any());
+
+        serviceCenter.handleDefect(Defect.E01, camera);
+        serviceCenter.handleDefect(Defect.E02, camera);
+        serviceCenter.handleDefect(Defect.E03, camera);
+        verify(mockOperationEngineerSE, times(2)).repair(Mockito.any(Camera.class),any());
+        verify(mockEmergencyEngineerSE, times(1)).repair(Mockito.any(Camera.class),any());
+
+        serviceCenter.handleDefect(Defect.E01, lidar);
+        serviceCenter.handleDefect(Defect.E02, lidar);
+        serviceCenter.handleDefect(Defect.E03, lidar);
+        verify(mockOperationEngineerSE, times(2)).repair(Mockito.any(Lidar.class),any());
+        verify(mockEmergencyEngineerSE, times(1)).repair(Mockito.any(Lidar.class),any());
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("Eventbus test")
+    void eventBusTest(){
 
     }
 
