@@ -2,6 +2,8 @@ package dhbw.mosbach.command;
 
 import dhbw.mosbach.builder.components.Engine;
 import dhbw.mosbach.builder.components.axle.SteeringAxle;
+import dhbw.mosbach.builder.enums.Position;
+
 public class TurnRight implements ICommand {
     private final Engine engine;
     private final SteeringAxle steeringAxle;
@@ -19,5 +21,6 @@ public class TurnRight implements ICommand {
     public void execute() {
         engine.move(percentage);
         steeringAxle.setDegree(degree);
+        steeringAxle.setPosition(Position.RIGHT);
     }
 }

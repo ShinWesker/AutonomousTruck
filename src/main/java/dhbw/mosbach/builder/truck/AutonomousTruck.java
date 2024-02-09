@@ -50,7 +50,7 @@ public class AutonomousTruck implements IVehicle {
 
     public void moveStraight(int percentage) {
         deactivateTurnSignals();
-        executeCommand(new MoveStraight(truckChassis.getSteeringAxle(), percentage));
+        executeCommand(new MoveStraight(truckChassis.getSteeringAxle(), percentage, truckChassis.getEngine()));
     }
 
     public void turnLeft(int degree, int percentage) {
@@ -64,7 +64,7 @@ public class AutonomousTruck implements IVehicle {
     private void turn(Position position, int degree, int percentage) {
         System.out.println("Truck turning " + position.toString().toLowerCase());
         activateTurnSignal(position);
-        applyBrakes(25);
+        applyBrakes(getTruckChassis().getEngine().getSpeed() - percentage);
         executeTurn(position, degree, percentage);
     }
 
@@ -82,6 +82,7 @@ public class AutonomousTruck implements IVehicle {
     }
 
     private void applyBrakes(int intensity) {
+        executeCommand(new BrakeLightOn(truckChassis.getBrakeLights()[0]));
         executeCommand(new CBrake(truckChassis.getAxles(), intensity));
         if (Boolean.TRUE.equals(connected)) {
             threePoleConnector.getBrakeBus().post(new EventBrake(intensity));
@@ -102,7 +103,6 @@ public class AutonomousTruck implements IVehicle {
 
     public void changeState() {
         state.toggle(this);
-        System.out.println(state.getClass().getSimpleName());
     }
 
     public void connect(Trailer trailer) {

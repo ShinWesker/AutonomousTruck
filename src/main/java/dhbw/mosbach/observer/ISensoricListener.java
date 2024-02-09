@@ -4,5 +4,5 @@ import dhbw.mosbach.builder.components.HoldingArea;
 
 public interface ISensoricListener {
     void detect();
-    void detect(HoldingArea holdingArea, String s);
+    void detect(HoldingArea holdingArea);
 }

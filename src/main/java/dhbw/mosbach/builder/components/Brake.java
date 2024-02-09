@@ -10,7 +10,6 @@ import lombok.Setter;
 public class Brake {
     private int percentage = 0;
 
-
     @Subscribe
     public void receive(EventBrake eventBrake){
         this.percentage = eventBrake.getPercentage();

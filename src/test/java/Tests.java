@@ -1,16 +1,33 @@
+import com.google.common.hash.Hashing;
 import dhbw.mosbach.builder.CentralUnit;
+import dhbw.mosbach.builder.components.Brake;
 import dhbw.mosbach.builder.components.ExteriorMirror;
+import dhbw.mosbach.builder.components.HoldingArea;
+import dhbw.mosbach.builder.components.Pallet;
+import dhbw.mosbach.builder.components.axle.Axle;
+import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
+import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
+import dhbw.mosbach.command.BrakeLightOn;
+import dhbw.mosbach.command.TurnSignalOn;
+import dhbw.mosbach.key.ElectronicKey;
+import dhbw.mosbach.key.ReceiverModule;
+import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
+import dhbw.mosbach.state.Active;
+import dhbw.mosbach.state.Inactive;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -97,7 +114,6 @@ public class Tests {
             assertTrue(mirror.getCamera().getStatus());
             assertTrue(mirror.getLidar().getStatus());
         }
-
         assertTrue(autonomousTruck.getTruckChassis().getEngine().getIsOn());
         assertEquals(0, autonomousTruck.getTruckChassis().getSteeringAxle().getDegree());
     }
@@ -121,10 +137,9 @@ public class Tests {
 
     @Test
     @Order(5)
-    @DisplayName("Test Observer")
+    @DisplayName("Observer detection")
     void testCentralUnitObservation(){
         CentralUnit centralUnit = spy(new CentralUnit());
-
         TruckMediator mediator = new TruckMediator();
         TruckBuilder builder = new TruckBuilder(centralUnit, mediator);
         TruckDirector truckDirector = new TruckDirector();
@@ -133,9 +148,189 @@ public class Tests {
 
         autonomousTruck.connect(trailer);
 
-        //TODO trailer.load();
+        centralUnit.loadLoadingPlan("src/main/resources/loadingPlan.json");
+
+        testUtil.loadAllItemsIntoTrailer(trailer);
+
         verify(centralUnit, times(1)).detect();
+        verify(centralUnit, times(16)).detect(Mockito.any(HoldingArea.class));
+
+        assertTrue(centralUnit.getLoadingPlanStatus());
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Commando behavior")
+    void testCommandoBehavior(){
+        CentralUnit centralUnit = new CentralUnit();
+        TruckMediator mediator = new TruckMediator();
+        mediator.setTruck(testUtil.createTruck());
+
+        BrakeLight brakeLight = new BrakeLight(mediator,Position.LEFT);
+        mediator.addBrakeLight(brakeLight);
+        centralUnit.setCommand(new BrakeLightOn(brakeLight));
+        centralUnit.execute();
+
+        assertTrue(brakeLight.getStatus());
+
+        TurnSignal turnSignalLeft = new TurnSignal(mediator,Position.LEFT, HorizontalPosition.FRONT);
+        TurnSignal turnSignalRight = new TurnSignal(mediator,Position.RIGHT, HorizontalPosition.FRONT);
+        mediator.addTurnSignal(turnSignalLeft);
+        mediator.addTurnSignal(turnSignalRight);
+        TurnSignal[] turnSignals = new TurnSignal[]{turnSignalLeft,turnSignalRight};
+
+        centralUnit.setCommand(new TurnSignalOn(turnSignals,Position.LEFT));
+        centralUnit.execute();
+
+        assertTrue(turnSignalLeft.getStatus());
+
+        centralUnit.setCommand(new TurnSignalOn(turnSignals,Position.RIGHT));
+        centralUnit.execute();
+
+        assertTrue(turnSignalRight.getStatus());
+
+        // more to go ....
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("Key password and activation/deactivation tests")
+    void keyTests(){
+        autonomousTruck = testUtil.createTruck();
+        ReceiverModule receiverModule = new ReceiverModule(autonomousTruck.getCentralUnit());
+        ElectronicKey electronicKey = new ElectronicKey("Kodiak2024", receiverModule);
+
+        assertEquals(
+                Hashing.sha256().hashString("Kodiak2024", StandardCharsets.UTF_8).toString(),
+                electronicKey.getPassword());
+
+        //correct key
+        electronicKey.sendSignal();
+        assertInstanceOf(Active.class, autonomousTruck.getState());
+
+        electronicKey.sendSignal();
+        assertInstanceOf(Inactive.class, autonomousTruck.getState());
+
+        //incorrect while inactive
+        ElectronicKey key2 = new ElectronicKey("Clown45", receiverModule);
+        key2.sendSignal();
+        assertInstanceOf(Inactive.class, autonomousTruck.getState());
+
+        //incorrect signal while active
+        electronicKey.sendSignal();
+        key2.sendSignal();
+        assertInstanceOf(Active.class, autonomousTruck.getState());
     }
 
 
+    @Test
+    @Order(8)
+    @DisplayName("Truck driving straight")
+    void truckStraightDriving(){
+        autonomousTruck = testUtil.createTruck();
+        trailer = testUtil.createTrailer();
+
+        autonomousTruck.connect(trailer);
+        autonomousTruck.moveStraight(75);
+
+        //check all signals to be off
+        for (TurnSignal t : autonomousTruck.getTruckChassis().getTurnSignals()){
+            assertFalse(t.getStatus());
+        }
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            assertFalse(t.getStatus());
+        }
+
+        assertEquals(Position.STRAIGHT, autonomousTruck.getTruckChassis().getSteeringAxle().getPosition());
+        assertEquals(0, autonomousTruck.getTruckChassis().getSteeringAxle().getDegree());
+        assertEquals(75 ,autonomousTruck.getTruckChassis().getEngine().getSpeed());
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("Truck driving left")
+    void truckLeftDriving(){
+        autonomousTruck = testUtil.createTruck();
+        trailer = testUtil.createTrailer();
+
+        autonomousTruck.connect(trailer);
+        autonomousTruck.moveStraight(75);
+        autonomousTruck.turnLeft(15,50);
+
+        for (TurnSignal t : autonomousTruck.getTruckChassis().getTurnSignals()){
+            if (t.getPosition() == Position.LEFT) {
+                assertTrue(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            if (t.getPosition() == Position.LEFT) {
+                assertTrue(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
+
+        assertEquals(Position.LEFT, autonomousTruck.getTruckChassis().getSteeringAxle().getPosition());
+        assertEquals(15, autonomousTruck.getTruckChassis().getSteeringAxle().getDegree());
+
+        for (Axle axle : autonomousTruck.getTruckChassis().getAxles()){
+            for (Brake b : axle.getBrakes()){
+                assertEquals(25,b.getPercentage());
+            }
+        }
+
+        for (Axle axle : trailer.getTrailerChassis().getAxles()){
+            for (Brake b : axle.getBrakes()){
+                assertEquals(25,b.getPercentage());
+            }
+        }
+
+        assertEquals(50 ,autonomousTruck.getTruckChassis().getEngine().getSpeed());
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("Truck driving right")
+    void truckRightDriving(){
+        autonomousTruck = testUtil.createTruck();
+        trailer = testUtil.createTrailer();
+
+        autonomousTruck.connect(trailer);
+        autonomousTruck.moveStraight(75);
+        autonomousTruck.turnRight(15,50);
+
+        for (TurnSignal t : autonomousTruck.getTruckChassis().getTurnSignals()){
+            if (t.getPosition() == Position.RIGHT) {
+                assertTrue(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            if (t.getPosition() == Position.RIGHT) {
+                assertTrue(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
+
+        assertEquals(Position.RIGHT, autonomousTruck.getTruckChassis().getSteeringAxle().getPosition());
+        assertEquals(15, autonomousTruck.getTruckChassis().getSteeringAxle().getDegree());
+
+        for (Axle axle : autonomousTruck.getTruckChassis().getAxles()){
+            for (Brake b : axle.getBrakes()){
+                assertEquals(25,b.getPercentage());
+            }
+        }
+
+        for (Axle axle : trailer.getTrailerChassis().getAxles()){
+            for (Brake b : axle.getBrakes()){
+                assertEquals(25,b.getPercentage());
+            }
+        }
+
+        assertEquals(50 ,autonomousTruck.getTruckChassis().getEngine().getSpeed());
+    }
 }

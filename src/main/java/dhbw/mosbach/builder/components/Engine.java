@@ -12,6 +12,7 @@ public class Engine implements IPart {
     private Boolean isOn;
     private final TruckBatteryControl control;
     private Defect defect;
+    private int speed;
 
     public Engine(TruckBatteryControl control){
         this.control = control;
@@ -25,6 +26,7 @@ public class Engine implements IPart {
     }
 
     public void move(int amount){
+        speed = amount;
         control.takeEnergy(amount);
     }
 

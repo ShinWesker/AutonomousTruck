@@ -1,0 +1,18 @@
+[
+  {"index": 0, "position": "LEFT", "item": "Apple"},
+  {"index": 1, "position": "RIGHT", "item": "Banana"},
+  {"index": 2, "position": "LEFT", "item": "Cherry"},
+  {"index": 3, "position": "RIGHT", "item": "Date"},
+  {"index": 4, "position": "LEFT", "item": "Elderberry"},
+  {"index": 5, "position": "RIGHT", "item": "Fig"},
+  {"index": 6, "position": "LEFT", "item": "Grape"},
+  {"index": 7, "position": "RIGHT", "item": "Honeydew"},
+  {"index": 8, "position": "LEFT", "item": "Kiwi"},
+  {"index": 9, "position": "RIGHT", "item": "Lemon"},
+  {"index": 10, "position": "LEFT", "item": "Mango"},
+  {"index": 11, "position": "RIGHT", "item": "Nectarine"},
+  {"index": 12, "position": "LEFT", "item": "Orange"},
+  {"index": 13, "position": "RIGHT", "item": "Papaya"},
+  {"index": 14, "position": "LEFT", "item": "Quince"},
+  {"index": 15, "position": "RIGHT", "item": "Raspberry"}
+]

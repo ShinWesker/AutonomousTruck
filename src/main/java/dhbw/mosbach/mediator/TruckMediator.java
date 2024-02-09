@@ -86,6 +86,7 @@ public class TruckMediator implements ITruckMediator {
                 if (truck.getConnected()) {
                     truck.getThreePoleConnector().getBrakeLightBus().post(new EventBrakeLightOn());
                 }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + electronicComponent);
         }
@@ -117,6 +118,7 @@ public class TruckMediator implements ITruckMediator {
                 if (truck.getConnected()) {
                     truck.getThreePoleConnector().getBrakeLightBus().post(new EventBrakeLightOff());
                 }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + electronicComponent);
         }

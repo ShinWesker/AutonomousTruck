@@ -1,18 +1,23 @@
 package dhbw.mosbach.command;
 
+import dhbw.mosbach.builder.components.Engine;
 import dhbw.mosbach.builder.components.axle.SteeringAxle;
+import dhbw.mosbach.builder.enums.Position;
 
 public class MoveStraight implements ICommand {
     private final SteeringAxle steeringAxle;
-    private final int degree;
+    private final int speed;
+    private final Engine engine;
 
-    public MoveStraight(SteeringAxle steeringAxle, int degree) {
+    public MoveStraight(SteeringAxle steeringAxle, int speed, Engine engine) {
         this.steeringAxle = steeringAxle;
-        this.degree = degree;
+        this.speed = speed;
+        this.engine = engine;
     }
-
     @Override
     public void execute() {
-        steeringAxle.setDegree(degree);
+        steeringAxle.setDegree(0);
+        steeringAxle.setPosition(Position.STRAIGHT);
+        engine.move(75);
     }
 }

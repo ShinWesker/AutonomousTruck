@@ -1,5 +1,8 @@
 package dhbw.mosbach.builder.components;
 
+import lombok.Getter;
+
+@Getter
 public class Pallet {
     private String item;
     public Pallet(String item){

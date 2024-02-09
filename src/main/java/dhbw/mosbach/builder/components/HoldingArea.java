@@ -22,11 +22,11 @@ public class HoldingArea {
 
     public void load(Pallet pallet) {
         this.pallet = pallet;
-        sensor.detect(this, "load");
+        sensor.detect(this);
     }
     public void unload() {
         pallet = null;
         System.out.println("Pallet unloaded");
-        sensor.detect(this, "unload");
+        sensor.detect(this);
     }
 }

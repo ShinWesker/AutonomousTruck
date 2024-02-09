@@ -1,5 +1,6 @@
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
+import dhbw.mosbach.builder.components.Pallet;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
 import dhbw.mosbach.builder.trailer.TrailerDirector;
@@ -23,5 +24,11 @@ public class TestUtil {
         TrailerVehicleBuilder trailerBuilder = new TrailerBuilder();
         VehicleDirector<Trailer, TrailerVehicleBuilder> trailerDirector = new TrailerDirector();
         return trailerDirector.build(trailerBuilder);
+    }
+    public void loadAllItemsIntoTrailer(Trailer trailer) {
+        String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew", "Kiwi", "Lemon", "Mango", "Nectarine", "Orange", "Papaya", "Quince", "Raspberry"};
+        for (int i = 0; i < fruits.length; i++) {
+            trailer.load(new Pallet(fruits[i]), i);
+        }
     }
 }
