@@ -136,7 +136,5 @@ public class Main {
         serviceCenter.handleDefect(Defect.E01, camera);
 
         autonomousTruck.examineParts(new Examiner(serviceCenter));
-
-
     }
 }

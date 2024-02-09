@@ -3,14 +3,14 @@ package dhbw.mosbach.command;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 
 public class BrakeLightOff implements ICommand {
-    private final BrakeLight[] brakeLights;
+    private final BrakeLight brakeLight;
 
-    public BrakeLightOff(BrakeLight[] brakeLights) {
-        this.brakeLights = brakeLights;
+    public BrakeLightOff(BrakeLight brakeLight) {
+        this.brakeLight = brakeLight;
     }
 
     @Override
     public void execute() {
-        brakeLights[0].deactivate();
+        brakeLight.deactivate();
     }
 }

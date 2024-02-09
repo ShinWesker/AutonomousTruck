@@ -13,7 +13,9 @@ import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
+import dhbw.mosbach.command.BrakeLightOff;
 import dhbw.mosbach.command.BrakeLightOn;
+import dhbw.mosbach.command.TurnSignalOff;
 import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.Defect;
@@ -21,6 +23,8 @@ import dhbw.mosbach.cor.MotorTeam;
 import dhbw.mosbach.cor.SensoryTeam;
 import dhbw.mosbach.cor.ServiceCenter;
 import dhbw.mosbach.cor.roles.TechnicalEngineer;
+import dhbw.mosbach.eventbus.ThreePoleConnector;
+import dhbw.mosbach.eventbus.events.*;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.mediator.TruckMediator;
@@ -432,7 +436,61 @@ public class Tests {
     @Order(14)
     @DisplayName("Eventbus test")
     void eventBusTest(){
+        autonomousTruck = testUtil.createTruck();
+        trailer = testUtil.createTrailer();
 
+        autonomousTruck.connect(trailer);
+        ThreePoleConnector connector = autonomousTruck.getThreePoleConnector();
+
+        // EventTurnSignalOn LEFT
+        connector.getTurnSignalBus().post(new EventTurnSignalOn(Position.LEFT));
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            if (t.getPosition() == Position.LEFT) {
+                assertTrue(t.getStatus());
+            }
+        }
+
+        // EventTurnSignalOff LEFT
+        connector.getTurnSignalBus().post(new EventTurnSignalOff(Position.LEFT));
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            if (t.getPosition() == Position.LEFT) {
+                assertFalse(t.getStatus());
+            }
+        }
+
+        // EventTurnSignalOn RIGHT
+        connector.getTurnSignalBus().post(new EventTurnSignalOn(Position.RIGHT));
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            if (t.getPosition() == Position.RIGHT) {
+                assertTrue(t.getStatus());
+            }
+        }
+
+        // EventTurnSignalOff RIGHT
+        connector.getTurnSignalBus().post(new EventTurnSignalOff(Position.RIGHT));
+        for (TurnSignal t : trailer.getTrailerChassis().getTurnSignals()){
+            if (t.getPosition() == Position.RIGHT) {
+                assertFalse(t.getStatus());
+            }
+        }
+
+        // EventBrakeLightOn
+        connector.getBrakeLightBus().post(new EventBrakeLightOn());
+        for (BrakeLight b : trailer.getTrailerChassis().getBrakeLights()){
+            assertTrue(b.getStatus());
+        }
+        // EventBrakeLightOff
+        connector.getBrakeLightBus().post(new EventBrakeLightOff());
+        for (BrakeLight b : trailer.getTrailerChassis().getBrakeLights()){
+            assertFalse(b.getStatus());
+        }
+
+        // EventBrake with value 25
+        connector.getBrakeBus().post(new EventBrake(25));
+        for (Axle a : trailer.getTrailerChassis().getAxles()){
+            for (Brake b : a.getBrakes()){
+                assertEquals(25, b.getPercentage());
+            }
+        }
     }
-
 }
