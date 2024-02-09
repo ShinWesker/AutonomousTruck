@@ -43,7 +43,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class Tests {
+class Tests {
     private AutonomousTruck autonomousTruck;
     private Trailer trailer;
     private TestUtil testUtil;

@@ -18,6 +18,6 @@ public class MoveStraight implements ICommand {
     public void execute() {
         steeringAxle.setDegree(0);
         steeringAxle.setPosition(Position.STRAIGHT);
-        engine.move(75);
+        engine.move(speed);
     }
 }

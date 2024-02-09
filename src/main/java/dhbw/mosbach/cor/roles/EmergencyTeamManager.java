@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class EmergencyTeamManager extends TeamMember {
     TechnicalEngineer[] technicalEngineers;
+    Random random = new Random();
     public EmergencyTeamManager (TechnicalEngineer[] technicalEngineers){
         this.technicalEngineers = technicalEngineers;
     }
@@ -23,7 +24,6 @@ public class EmergencyTeamManager extends TeamMember {
         return parent.getPassword();
     }
     public void repair(IPart part) {
-        Random random = new Random();
         int engineerIndex = random.nextInt(technicalEngineers.length);
         technicalEngineers[engineerIndex].repair(part, getPassword());
     }

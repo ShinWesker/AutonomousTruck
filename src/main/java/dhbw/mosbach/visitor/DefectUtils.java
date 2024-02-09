@@ -6,6 +6,9 @@ import java.util.Random;
 
 public class DefectUtils {
 
+    private DefectUtils(){
+    }
+
     private static final Random random = new Random();
     public static boolean checkDefect(IPart part) {
         if (part.getDefect() != null) {

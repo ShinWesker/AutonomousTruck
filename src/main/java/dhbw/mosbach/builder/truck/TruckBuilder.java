@@ -16,9 +16,9 @@ import dhbw.mosbach.mediator.TruckMediator;
 
 public class TruckBuilder implements TruckVehicleBuilder {
     CentralUnit centralUnit;
-    private Axle[] axles;
+
     private SteeringAxle steeringAxle;
-    private Battery battery;
+
     private Cabine cabine;
     private Coupling coupling;
     private ITruckMediator mediator;
@@ -32,6 +32,7 @@ public class TruckBuilder implements TruckVehicleBuilder {
 
     @Override
     public void buildAxles() {
+        Axle[] axles;
         axles = new Axle[2];
 
         for (int i = 0; i < axles.length + 1; i++) {
@@ -50,6 +51,7 @@ public class TruckBuilder implements TruckVehicleBuilder {
 
     @Override
     public void buildChassis() {
+        Battery battery;
         battery = new Battery();
         TruckBatteryControl truckBatteryControl = new TruckBatteryControl(battery);
         coupling = new Coupling();
