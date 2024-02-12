@@ -1,5 +1,6 @@
 package dhbw.mosbach.builder.trailer;
 
+import dhbw.mosbach.builder.VehicleBuilder;
 import dhbw.mosbach.builder.components.Brake;
 import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
@@ -9,7 +10,7 @@ import dhbw.mosbach.builder.components.chassis.TrailerChassis;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
 
-public class TrailerBuilder implements TrailerVehicleBuilder {
+public class TrailerBuilder implements VehicleBuilder<Trailer> {
 
     TrailerChassis.TrailerChassisBuilder trailerChassisBuilder;
     @Override

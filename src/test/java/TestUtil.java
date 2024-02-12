@@ -1,19 +1,12 @@
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
 import dhbw.mosbach.builder.components.Pallet;
-import dhbw.mosbach.builder.components.chassis.TruckChassis;
-import dhbw.mosbach.builder.components.light.TurnSignal;
-import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
 import dhbw.mosbach.builder.trailer.TrailerDirector;
-import dhbw.mosbach.builder.trailer.TrailerVehicleBuilder;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
-import dhbw.mosbach.command.ICommand;
-import dhbw.mosbach.command.TurnSignalOff;
-import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.cor.roles.EmergencyTeamManager;
 import dhbw.mosbach.cor.roles.OperationTeamManager;
 import dhbw.mosbach.cor.roles.Supervisor;
@@ -27,14 +20,15 @@ public class TestUtil {
     public AutonomousTruck createTruck(){
         CentralUnit centralUnit = new CentralUnit();
         TruckMediator mediator = new TruckMediator();
-        TruckBuilder builder = new TruckBuilder(centralUnit, mediator);
-        TruckDirector truckDirector = new TruckDirector();
-        return truckDirector.build(builder);
+
+        TruckBuilder truckBuilder = new TruckBuilder(centralUnit, mediator);
+        VehicleDirector<AutonomousTruck, TruckBuilder> truckDirector = new TruckDirector();
+        return truckDirector.build(truckBuilder);
     }
 
     public Trailer createTrailer(){
-        TrailerVehicleBuilder trailerBuilder = new TrailerBuilder();
-        VehicleDirector<Trailer, TrailerVehicleBuilder> trailerDirector = new TrailerDirector();
+        TrailerBuilder trailerBuilder = new TrailerBuilder();
+        VehicleDirector<Trailer, TrailerBuilder> trailerDirector = new TrailerDirector();
         return trailerDirector.build(trailerBuilder);
     }
 

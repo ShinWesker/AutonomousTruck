@@ -9,11 +9,9 @@ import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
 import dhbw.mosbach.builder.trailer.TrailerDirector;
-import dhbw.mosbach.builder.trailer.TrailerVehicleBuilder;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
-import dhbw.mosbach.builder.truck.TruckVehicleBuilder;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.cor.MotorTeam;
@@ -36,13 +34,13 @@ public class Main {
         ITruckMediator mediator = new TruckMediator();
 
         // Builder
-        TruckVehicleBuilder truckBuilder = new TruckBuilder(centralUnit, mediator);
-        VehicleDirector<AutonomousTruck, TruckVehicleBuilder> truckDirector = new TruckDirector();
+        TruckBuilder truckBuilder = new TruckBuilder(centralUnit, mediator);
+        VehicleDirector<AutonomousTruck, TruckBuilder> truckDirector = new TruckDirector();
         AutonomousTruck autonomousTruck = truckDirector.build(truckBuilder);
 
 
-        TrailerVehicleBuilder trailerBuilder = new TrailerBuilder();
-        VehicleDirector<Trailer, TrailerVehicleBuilder> trailerDirector = new TrailerDirector();
+        TrailerBuilder trailerBuilder = new TrailerBuilder();
+        VehicleDirector<Trailer, TrailerBuilder> trailerDirector = new TrailerDirector();
         Trailer trailer = trailerDirector.build(trailerBuilder);
 
         System.out.println(autonomousTruck);

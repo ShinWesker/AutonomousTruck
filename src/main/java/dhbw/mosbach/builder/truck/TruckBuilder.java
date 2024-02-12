@@ -2,6 +2,7 @@ package dhbw.mosbach.builder.truck;
 
 import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
+import dhbw.mosbach.builder.VehicleBuilder;
 import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.builder.components.chassis.TruckChassis;
 import dhbw.mosbach.builder.components.axle.Axle;
@@ -14,11 +15,9 @@ import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
 
-public class TruckBuilder implements TruckVehicleBuilder {
+public class TruckBuilder implements VehicleBuilder<AutonomousTruck> {
     CentralUnit centralUnit;
-
     private SteeringAxle steeringAxle;
-
     private Cabine cabine;
     private Coupling coupling;
     private final ITruckMediator mediator;
@@ -61,7 +60,6 @@ public class TruckBuilder implements TruckVehicleBuilder {
                 .setEngine(new Engine(truckBatteryControl));
     }
 
-    @Override
     public void buildCabin() {
         HeadLight[] headLights = {
                 new HeadLight(mediator,Position.LEFT),
@@ -90,11 +88,9 @@ public class TruckBuilder implements TruckVehicleBuilder {
         cabine = new Cabine(headLights, exteriorMirrors);
     }
 
-    @Override
     public void attachCabin() {
         truckChassisBuilder.setCabine(cabine);
     }
-
     @Override
     public void buildSensory() {
         BrakeLight[] brakeLights = {
@@ -120,7 +116,6 @@ public class TruckBuilder implements TruckVehicleBuilder {
                 .setTurnSignals(turnSignals);
     }
 
-    @Override
     public void connectSensory() {
         coupling.getSensor().addListener(centralUnit);
     }
