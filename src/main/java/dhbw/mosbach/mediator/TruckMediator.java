@@ -70,9 +70,7 @@ public class TruckMediator implements ITruckMediator {
                 break;
             case TurnSignal turnSignal:
                 for (TurnSignal t : turnSignals){
-                    if (t.getPosition() == turnSignal.getPosition()) {
-                        t.setStatus(true);
-                    }
+                    t.setStatus(t.getPosition() == turnSignal.getPosition());
                 }
                 if (truck.getConnected()) {
                     System.out.println("TurnSignal Event!");
@@ -104,9 +102,7 @@ public class TruckMediator implements ITruckMediator {
                 break;
             case TurnSignal turnSignal:
                 for (TurnSignal t : turnSignals){
-                    if (t.getPosition() == turnSignal.getPosition()) {
-                        t.setStatus(false);
-                    }
+                    turnOffComponents(turnSignals);
                 }
                 if (truck.getConnected()) {
                     System.out.println("TurnSignal Event!");

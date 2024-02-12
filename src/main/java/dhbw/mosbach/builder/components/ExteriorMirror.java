@@ -3,11 +3,14 @@ import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.light.Lidar;
 import dhbw.mosbach.builder.enums.Position;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class ExteriorMirror {
-    private final Camera camera;
-    private final Lidar lidar;
+    @Setter
+    private Camera camera;
+    @Setter
+    private Lidar lidar;
     private final Position position;
 
     public ExteriorMirror(Camera camera, Lidar lidar, Position position) {

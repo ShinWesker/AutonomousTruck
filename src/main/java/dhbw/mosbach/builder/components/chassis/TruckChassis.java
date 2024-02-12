@@ -8,11 +8,13 @@ import dhbw.mosbach.builder.components.Cabine;
 import dhbw.mosbach.builder.components.Coupling;
 import dhbw.mosbach.builder.components.Engine;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class TruckChassis extends AChassis {
     private final Cabine cabine;
-    private final Engine engine;
+    @Setter
+    private Engine engine;
     private final Coupling coupling;
     private final SteeringAxle steeringAxle;
 

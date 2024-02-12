@@ -6,20 +6,24 @@ import java.util.Random;
 
 public class DefectUtils {
 
+    static boolean activateRandom = false;
+
     private DefectUtils(){
     }
 
     private static final Random random = new Random();
     public static boolean checkDefect(IPart part) {
-        if (part.getDefect() != null) {
-            return true;
-        }
+        if (activateRandom) {
+            if (part.getDefect() != null) {
+                return true;
+            }
 
-        if (random.nextInt(100) < 5) {
-            Defect newDefect = Defect.values()[random.nextInt(Defect.values().length)];
-            part.setDefect(newDefect);
-            System.out.println("New defect introduced: " + newDefect);
-            return true;
+            if (random.nextInt(100) < 5) {
+                Defect newDefect = Defect.values()[random.nextInt(Defect.values().length)];
+                part.setDefect(newDefect);
+                System.out.println("New defect introduced: " + newDefect);
+                return true;
+            }
         }
 
         return false;

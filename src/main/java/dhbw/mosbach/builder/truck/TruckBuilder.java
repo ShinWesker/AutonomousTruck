@@ -21,7 +21,7 @@ public class TruckBuilder implements TruckVehicleBuilder {
 
     private Cabine cabine;
     private Coupling coupling;
-    private ITruckMediator mediator;
+    private final ITruckMediator mediator;
 
     TruckChassis.TruckChassisBuilder truckChassisBuilder = new TruckChassis.TruckChassisBuilder();
 

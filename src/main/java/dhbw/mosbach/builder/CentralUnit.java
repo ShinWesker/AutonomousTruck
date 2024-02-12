@@ -23,7 +23,7 @@ import org.json.JSONTokener;
 public class CentralUnit implements ISensoricListener {
     @Setter
     private ICommand command;
-    private List<LoadingPlanItem> loadedItems = new ArrayList<>();
+    private final List<LoadingPlanItem> loadedItems = new ArrayList<>();
     @Getter
     private Boolean loadingPlanStatus = false;
     @Setter

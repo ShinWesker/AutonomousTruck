@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class Pallet {
-    private String item;
+    private final String item;
     public Pallet(String item){
         this.item = item;
     }

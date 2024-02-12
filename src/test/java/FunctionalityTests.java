@@ -1,31 +1,32 @@
 import com.google.common.hash.Hashing;
+import dhbw.mosbach.builder.components.*;
+import dhbw.mosbach.command.*;
+import dhbw.mosbach.eventbus.events.*;
 import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
-import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.builder.components.axle.Axle;
+import dhbw.mosbach.builder.components.chassis.TruckChassis;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.light.Lidar;
 import dhbw.mosbach.builder.components.light.TurnSignal;
-import dhbw.mosbach.builder.enums.HorizontalPosition;
 import dhbw.mosbach.builder.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
-import dhbw.mosbach.command.BrakeLightOn;
-import dhbw.mosbach.command.TurnSignalOn;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.cor.Defect;
 import dhbw.mosbach.cor.MotorTeam;
 import dhbw.mosbach.cor.SensoryTeam;
 import dhbw.mosbach.cor.ServiceCenter;
+import dhbw.mosbach.cor.roles.Supervisor;
 import dhbw.mosbach.cor.roles.TechnicalEngineer;
 import dhbw.mosbach.eventbus.ThreePoleConnector;
-import dhbw.mosbach.eventbus.events.*;
 import dhbw.mosbach.key.ElectronicKey;
 import dhbw.mosbach.key.ReceiverModule;
 import dhbw.mosbach.mediator.TruckMediator;
+import dhbw.mosbach.proxy.Robot;
 import dhbw.mosbach.state.Active;
 import dhbw.mosbach.state.Inactive;
 import dhbw.mosbach.visitor.Examiner;
@@ -43,7 +44,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class Tests {
+class FunctionalityTests {
     private AutonomousTruck autonomousTruck;
     private Trailer trailer;
     private TestUtil testUtil;
@@ -173,34 +174,157 @@ class Tests {
     @Order(6)
     @DisplayName("Commando behavior")
     void testCommandoBehavior(){
-        CentralUnit centralUnit = new CentralUnit();
-        TruckMediator mediator = new TruckMediator();
-        mediator.setTruck(testUtil.createTruck());
 
-        BrakeLight brakeLight = new BrakeLight(mediator,Position.LEFT);
-        mediator.addBrakeLight(brakeLight);
-        centralUnit.setCommand(new BrakeLightOn(brakeLight));
+        autonomousTruck = testUtil.createTruck();
+        CentralUnit centralUnit = autonomousTruck.getCentralUnit();
+        TruckChassis chassis = autonomousTruck.getTruckChassis();
+        Position position = Position.LEFT;
+
+        // BlinkerOn LEFT
+        centralUnit.setCommand(new TurnSignalOn(chassis.getTurnSignals(),position));
         centralUnit.execute();
 
-        assertTrue(brakeLight.getStatus());
+        for (TurnSignal t : chassis.getTurnSignals()){
+            if (t.getPosition() == position) {
+                assertTrue(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
 
-        TurnSignal turnSignalLeft = new TurnSignal(mediator,Position.LEFT, HorizontalPosition.FRONT);
-        TurnSignal turnSignalRight = new TurnSignal(mediator,Position.RIGHT, HorizontalPosition.FRONT);
-        mediator.addTurnSignal(turnSignalLeft);
-        mediator.addTurnSignal(turnSignalRight);
-        TurnSignal[] turnSignals = new TurnSignal[]{turnSignalLeft,turnSignalRight};
+        // BlinkerOn Right
+        position = Position.RIGHT;
+        centralUnit.setCommand(new TurnSignalOn(chassis.getTurnSignals(),position));
+        centralUnit.execute();
+        for (TurnSignal t : chassis.getTurnSignals()){
+            if (t.getPosition() == position) {
+                assertTrue(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
 
-        centralUnit.setCommand(new TurnSignalOn(turnSignals,Position.LEFT));
+        // BlinkerOff LEFT
+        position = Position.LEFT;
+        centralUnit.setCommand(new TurnSignalOff(chassis.getTurnSignals(),position));
         centralUnit.execute();
 
-        assertTrue(turnSignalLeft.getStatus());
+        for (TurnSignal t : chassis.getTurnSignals()){
+            if (t.getPosition() == position) {
+                assertFalse(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
 
-        centralUnit.setCommand(new TurnSignalOn(turnSignals,Position.RIGHT));
+        // BlinkerOff Right
+        position = Position.RIGHT;
+        centralUnit.setCommand(new TurnSignalOff(chassis.getTurnSignals(),position));
+        centralUnit.execute();
+        for (TurnSignal t : chassis.getTurnSignals()){
+            if (t.getPosition() == position) {
+                assertFalse(t.getStatus());
+            } else{
+                assertFalse(t.getStatus());
+            }
+        }
+
+        //BrakeLightOn
+        centralUnit.setCommand(new BrakeLightOn(chassis.getBrakeLights()[0]));
         centralUnit.execute();
 
-        assertTrue(turnSignalRight.getStatus());
+        for (BrakeLight b : chassis.getBrakeLights()){
+            assertTrue(b.getStatus());
+        }
 
-        // more to go ....
+        //BrakeLightOff
+        centralUnit.setCommand(new BrakeLightOff(chassis.getBrakeLights()[0]));
+        centralUnit.execute();
+
+        for (BrakeLight b : chassis.getBrakeLights()){
+            assertFalse(b.getStatus());
+        }
+
+        // CameraOn
+        centralUnit.setCommand(new CameraOn(chassis.getCabine().getExteriorMirrors()[0].getCamera()));
+        centralUnit.execute();
+
+        for (ExteriorMirror ex : chassis.getCabine().getExteriorMirrors()){
+            assertTrue(ex.getCamera().getStatus());
+        }
+
+        // CameraOff
+        centralUnit.setCommand(new CameraOff(chassis.getCabine().getExteriorMirrors()[0].getCamera()));
+        centralUnit.execute();
+
+        for (ExteriorMirror ex : chassis.getCabine().getExteriorMirrors()){
+            assertFalse(ex.getCamera().getStatus());
+        }
+
+        // LidarOn
+        centralUnit.setCommand(new LidarOn(chassis.getCabine().getExteriorMirrors()[0].getLidar()));
+        centralUnit.execute();
+
+        for (ExteriorMirror ex : chassis.getCabine().getExteriorMirrors()){
+            assertTrue(ex.getLidar().getStatus());
+        }
+
+        // LidarOff
+        centralUnit.setCommand(new LidarOff(chassis.getCabine().getExteriorMirrors()[0].getLidar()));
+        centralUnit.execute();
+
+        for (ExteriorMirror ex : chassis.getCabine().getExteriorMirrors()){
+            assertFalse(ex.getLidar().getStatus());
+        }
+
+        // CBrake
+        int percentage = 35;
+        centralUnit.setCommand(new CBrake(chassis.getAxles(), percentage));
+        centralUnit.execute();
+
+        for (Axle a : chassis.getAxles()){
+            for (Brake b : a.getBrakes()){
+                assertEquals(percentage ,b.getPercentage());
+            }
+        }
+
+        // EngineStart
+        centralUnit.setCommand(new EngineStart(chassis.getEngine()));
+        centralUnit.execute();
+
+        assertTrue(chassis.getEngine().getIsOn());
+
+        // EngineShutDown
+        centralUnit.setCommand(new EngineShutDown(chassis.getEngine()));
+        centralUnit.execute();
+
+        assertFalse(chassis.getEngine().getIsOn());
+
+        // Move Straight
+        centralUnit.setCommand(new MoveStraight(chassis.getSteeringAxle(),75, chassis.getEngine()));
+        centralUnit.execute();
+
+        assertEquals(Position.STRAIGHT,  chassis.getSteeringAxle().getPosition());
+        assertEquals(0, chassis.getSteeringAxle().getDegree());
+        assertEquals(75,chassis.getEngine().getSpeed());
+
+        // Turn Left
+        centralUnit.setCommand(new TurnLeft(chassis.getEngine(),chassis.getSteeringAxle(),65, 35));
+        centralUnit.execute();
+
+        assertEquals(Position.LEFT,  chassis.getSteeringAxle().getPosition());
+        assertEquals(35, chassis.getSteeringAxle().getDegree());
+        assertEquals(65,chassis.getEngine().getSpeed());
+
+        // Turn Right
+        centralUnit.setCommand(new TurnRight(chassis.getEngine(),chassis.getSteeringAxle(),50, 15));
+        centralUnit.execute();
+
+        assertEquals(Position.RIGHT,  chassis.getSteeringAxle().getPosition());
+        assertEquals(15, chassis.getSteeringAxle().getDegree());
+        assertEquals(50,chassis.getEngine().getSpeed());
+
+
     }
 
     @Test
@@ -232,7 +356,6 @@ class Tests {
         key2.sendSignal();
         assertInstanceOf(Active.class, autonomousTruck.getState());
     }
-
 
     @Test
     @Order(8)
@@ -374,22 +497,48 @@ class Tests {
     @Test
     @Order(12)
     @DisplayName("Visitor test")
-    void visitorTest(){
-        Examiner examiner = spy(new Examiner(new ServiceCenter(null)));
+    void visitorTest() {
+        Supervisor supervisor = testUtil.createSupervisor();
+        MotorTeam motorTeam = new MotorTeam(supervisor);
+        SensoryTeam sensoryTeam = new SensoryTeam(supervisor);
+        sensoryTeam.setSuccessor(motorTeam);
+
+        ServiceCenter serviceCenter = new ServiceCenter(sensoryTeam);
+        Examiner examiner = spy(new Examiner(serviceCenter));
+
         autonomousTruck = testUtil.createTruck();
 
-        autonomousTruck.getTruckChassis().getEngine().setDefect(Defect.E03);
-        autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[0].getCamera().setDefect(Defect.E02);
-        autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[1].getLidar().setDefect(Defect.E01);
+        Engine engine = spy(new Engine(null));
+        Camera camera = spy(new Camera(null, null));
+        Lidar lidar = spy(new Lidar(null, null));
+
+        autonomousTruck.getTruckChassis().setEngine(engine);
+        autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[0].setCamera(camera);
+        autonomousTruck.getTruckChassis().getCabine().getExteriorMirrors()[0].setLidar(lidar);
+
+        engine.setDefect(Defect.E03);
+        camera.setDefect(Defect.E02);
+        lidar.setDefect(Defect.E01);
 
         autonomousTruck.examineParts(examiner);
 
-        verify(examiner,times(1)).detect(Mockito.any(Engine.class));
-        verify(examiner,times(2)).detect(Mockito.any(Camera.class));
-        verify(examiner,times(2)).detect(Mockito.any(Lidar.class));
 
-        verify(examiner,times(3)).contactServiceTeam(Mockito.any(IPart.class));
+        verify(engine, times(1)).acceptControl(any(Examiner.class));
+        verify(camera, times(1)).acceptControl(any(Examiner.class));
+        verify(lidar, times(1)).acceptControl(any(Examiner.class));
 
+        verify(examiner, times(1)).detect(engine);
+        verify(examiner, times(1)).detect(camera);
+        verify(examiner, times(1)).detect(lidar);
+        verify(examiner, times(3)).contactServiceTeam(any(IPart.class));
+
+        verify(engine, times(1)).acceptPartVisitor(any(Robot.class));
+        verify(camera, times(1)).acceptPartVisitor(any(Robot.class));
+        verify(lidar, times(1)).acceptPartVisitor(any(Robot.class));
+
+        verify(engine, times(1)).repair();
+        verify(camera, times(1)).repair();
+        verify(lidar, times(1)).repair();
     }
 
     @Test
