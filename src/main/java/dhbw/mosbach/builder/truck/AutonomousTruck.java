@@ -133,10 +133,10 @@ public class AutonomousTruck implements IVehicle {
         }
     }
 
-    public void examineParts(Examiner examiner){
+    public void examineParts(Examiner examiner) {
         truckChassis.getEngine().acceptControl(examiner);
 
-        for (ExteriorMirror mirror : truckChassis.getCabine().getExteriorMirrors()){
+        for (ExteriorMirror mirror : truckChassis.getCabine().getExteriorMirrors()) {
             mirror.getCamera().acceptControl(examiner);
             mirror.getLidar().acceptControl(examiner);
         }
