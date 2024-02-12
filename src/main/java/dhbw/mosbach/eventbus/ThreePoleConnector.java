@@ -8,18 +8,18 @@ import lombok.Getter;
 
 @Getter
 public class ThreePoleConnector {
-    EventBus brakeBus = new EventBus();
-    EventBus turnSignalBus = new EventBus();
-    EventBus brakeLightBus = new EventBus();
+    private EventBus brakeBus = new EventBus();
+    private EventBus turnSignalBus = new EventBus();
+    private EventBus brakeLightBus = new EventBus();
 
-    public void addSubscriberBrakeBus(Brake brake){
+    public void subscribeBrakeBus(Brake brake){
         brakeBus.register(brake);
     }
-    public void addSubscriberTurnSignalBus(TurnSignal turnSignal){
+    public void subscribeTurnSignalBus(TurnSignal turnSignal){
         turnSignalBus.register(turnSignal);
     }
 
-    public void addSubscriberBrakeLightBus(BrakeLight brakeLight){
+    public void subscribeBrakeLightBus(BrakeLight brakeLight){
         brakeLightBus.register(brakeLight);
     }
 

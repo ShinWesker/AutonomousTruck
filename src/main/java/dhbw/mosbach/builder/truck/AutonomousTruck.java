@@ -122,14 +122,14 @@ public class AutonomousTruck implements IVehicle {
     private void connectComponents(Trailer trailer) {
         for (Axle axle : trailer.getTrailerChassis().getAxles()) {
             for (Brake brake : axle.getBrakes()) {
-                threePoleConnector.addSubscriberBrakeBus(brake);
+                threePoleConnector.subscribeBrakeBus(brake);
             }
         }
         for (BrakeLight brakeLight : trailer.getTrailerChassis().getBrakeLights()) {
-            threePoleConnector.addSubscriberBrakeLightBus(brakeLight);
+            threePoleConnector.subscribeBrakeLightBus(brakeLight);
         }
         for (TurnSignal turnSignal : trailer.getTrailerChassis().getTurnSignals()) {
-            threePoleConnector.addSubscriberTurnSignalBus(turnSignal);
+            threePoleConnector.subscribeTurnSignalBus(turnSignal);
         }
     }
 

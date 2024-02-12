@@ -6,7 +6,6 @@ import lombok.Getter;
 
 public class CBrake implements ICommand {
     private final Axle[] axles;
-
     @Getter
     private final int intensity;
 
