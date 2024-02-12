@@ -1,6 +1,6 @@
 package dhbw.mosbach.builder.components;
 
-import dhbw.mosbach.bridge.TruckBatteryControl;
+import dhbw.mosbach.composite.bridge.TruckBatteryControl;
 import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.visitor.DefectUtils;
 import dhbw.mosbach.visitor.IControlVisitor;
@@ -60,8 +60,8 @@ public class Engine implements IPart {
     }
 
     @Override
-    public void acceptPartVisitor(IPartVisitor iPartVisitor) {
-        iPartVisitor.repair(this);
+    public void acceptPartVisitor(IPartVisitor visitor) {
+        visitor.repair(this);
     }
 
     public void repair() {
@@ -70,7 +70,7 @@ public class Engine implements IPart {
     }
 
     @Override
-    public void acceptControl(IControlVisitor control) {
-        control.detect(this);
+    public void acceptControl(IControlVisitor visitor) {
+        visitor.detect(this);
     }
 }

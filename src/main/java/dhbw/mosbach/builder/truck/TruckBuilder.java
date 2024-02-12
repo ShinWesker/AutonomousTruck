@@ -1,6 +1,6 @@
 package dhbw.mosbach.builder.truck;
 
-import dhbw.mosbach.bridge.TruckBatteryControl;
+import dhbw.mosbach.composite.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.IVehicleBuilder;
 import dhbw.mosbach.builder.components.*;

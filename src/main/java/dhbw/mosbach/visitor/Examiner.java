@@ -13,23 +13,21 @@ public class Examiner implements IControlVisitor {
     @Override
     public void detect(Engine engine) {
         if (engine.getDefect() != null) {
-            contactServiceTeam(engine);        }
+            serviceCenter.handleDefect(engine.getDefect(),engine);
+        }
     }
 
     @Override
     public void detect(Camera camera) {
         if (camera.getDefect() != null) {
-            contactServiceTeam(camera);        }
+            serviceCenter.handleDefect(camera.getDefect(),camera);
+        }
     }
 
     @Override
     public void detect(Lidar lidar) {
         if (lidar.getDefect() != null) {
-            contactServiceTeam(lidar);
+            serviceCenter.handleDefect(lidar.getDefect(),lidar);
         }
-    }
-
-    public void contactServiceTeam(IPart part){
-        serviceCenter.handleDefect(part.getDefect(), part);
     }
 }

@@ -1,4 +1,4 @@
-package dhbw.mosbach.proxy;
+package dhbw.mosbach.visitor;
 
 import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.Engine;

@@ -1,6 +1,6 @@
 package dhbw.mosbach.command;
 
-import dhbw.mosbach.key.ReceiverModule;
+import dhbw.mosbach.state.ReceiverModule;
 
 public class SendSignal implements ICommand {
 

@@ -1,4 +1,4 @@
-package dhbw.mosbach.key;
+package dhbw.mosbach.state;
 
 import dhbw.mosbach.command.ICommand;
 import dhbw.mosbach.command.SendSignal;

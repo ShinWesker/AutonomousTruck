@@ -1,6 +1,6 @@
 package dhbw.mosbach;
 
-import dhbw.mosbach.bridge.TruckBatteryControl;
+import dhbw.mosbach.composite.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
 import dhbw.mosbach.builder.components.*;
@@ -21,8 +21,8 @@ import dhbw.mosbach.cor.roles.EmergencyTeamManager;
 import dhbw.mosbach.cor.roles.OperationTeamManager;
 import dhbw.mosbach.cor.roles.Supervisor;
 import dhbw.mosbach.cor.roles.TechnicalEngineer;
-import dhbw.mosbach.key.ElectronicKey;
-import dhbw.mosbach.key.ReceiverModule;
+import dhbw.mosbach.state.ElectronicKey;
+import dhbw.mosbach.state.ReceiverModule;
 import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
 import dhbw.mosbach.visitor.Examiner;

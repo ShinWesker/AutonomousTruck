@@ -52,8 +52,8 @@ public class Lidar extends ElectronicComponent implements IPart {
     }
 
     @Override
-    public void acceptPartVisitor(IPartVisitor iPartVisitor) {
-        iPartVisitor.repair(this);
+    public void acceptPartVisitor(IPartVisitor visitor) {
+        visitor.repair(this);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Lidar extends ElectronicComponent implements IPart {
     }
 
     @Override
-    public void acceptControl(IControlVisitor control) {
-        control.detect(this);
+    public void acceptControl(IControlVisitor visitor) {
+        visitor.detect(this);
     }
 }

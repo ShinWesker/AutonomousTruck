@@ -1,4 +1,4 @@
-package dhbw.mosbach.bridge;
+package dhbw.mosbach.composite.bridge;
 
 import dhbw.mosbach.composite.Battery;
 

@@ -1,4 +1,4 @@
-package dhbw.mosbach.key;
+package dhbw.mosbach.state;
 
 import com.google.common.hash.Hashing;
 

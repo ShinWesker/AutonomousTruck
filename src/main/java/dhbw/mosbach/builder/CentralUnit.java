@@ -4,8 +4,6 @@ import dhbw.mosbach.builder.components.HoldingArea;
 import dhbw.mosbach.builder.components.LoadingPlanItem;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.command.ICommand;
-import dhbw.mosbach.key.IEncryption;
-import dhbw.mosbach.key.SHA256;
 import dhbw.mosbach.observer.ISensoricListener;
 import lombok.Getter;
 import lombok.Setter;

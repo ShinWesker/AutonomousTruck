@@ -1,4 +1,4 @@
-package dhbw.mosbach.bridge;
+package dhbw.mosbach.composite.bridge;
 
 public interface IBattery {
     void charge();

@@ -1,6 +1,6 @@
 package dhbw.mosbach.composite;
 
-import dhbw.mosbach.bridge.IBattery;
+import dhbw.mosbach.composite.bridge.IBattery;
 
 public class Battery implements IBattery {
     private final MainCell[] cells;
