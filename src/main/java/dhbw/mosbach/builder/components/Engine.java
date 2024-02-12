@@ -1,7 +1,7 @@
 package dhbw.mosbach.builder.components;
 
 import dhbw.mosbach.bridge.TruckBatteryControl;
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.visitor.DefectUtils;
 import dhbw.mosbach.visitor.IControlVisitor;
 import dhbw.mosbach.visitor.IPartVisitor;

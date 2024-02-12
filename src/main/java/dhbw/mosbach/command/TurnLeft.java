@@ -2,7 +2,7 @@ package dhbw.mosbach.command;
 
 import dhbw.mosbach.builder.components.axle.SteeringAxle;
 import dhbw.mosbach.builder.components.Engine;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 
 public class TurnLeft implements  ICommand {
     private final Engine engine;

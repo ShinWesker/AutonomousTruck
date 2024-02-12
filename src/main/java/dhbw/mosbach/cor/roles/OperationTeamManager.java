@@ -1,6 +1,6 @@
 package dhbw.mosbach.cor.roles;
 
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.visitor.IPart;
 
 import java.util.Random;
@@ -16,7 +16,7 @@ public class OperationTeamManager extends TeamMember{
     @Override
     public void repairDefect(Defect defect, IPart part) {
         if (defect == Defect.E01 || defect == Defect.E02) {
-            repair(part);
+            repair(defect,part);
         } else if(successor != null){
             successor.repairDefect(defect,part);
         }
@@ -27,8 +27,8 @@ public class OperationTeamManager extends TeamMember{
         return parent.getPassword();
     }
 
-    public void repair(IPart part){
+    private void repair(Defect defect,IPart part){
         int engineerIndex = random.nextInt(technicalEngineers.length);
-        technicalEngineers[engineerIndex].repair(part, getPassword());
+        technicalEngineers[engineerIndex].repairDefect(defect, part);
     }
 }

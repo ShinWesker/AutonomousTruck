@@ -1,4 +1,5 @@
 package dhbw.mosbach.cor;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.visitor.IPart;
 import lombok.Getter;
 

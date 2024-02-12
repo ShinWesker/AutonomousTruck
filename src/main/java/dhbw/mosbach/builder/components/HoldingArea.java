@@ -1,6 +1,6 @@
 package dhbw.mosbach.builder.components;
 
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.observer.HoldingAreaSensor;
 import lombok.Getter;
 import lombok.Setter;

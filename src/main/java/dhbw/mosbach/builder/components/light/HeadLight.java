@@ -1,7 +1,7 @@
 package dhbw.mosbach.builder.components.light;
 
-import dhbw.mosbach.builder.enums.HorizontalPosition;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.HorizontalPosition;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.mediator.ITruckMediator;
 
 public class HeadLight extends ElectronicComponent {

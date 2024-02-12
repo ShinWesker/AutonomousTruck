@@ -1,4 +1,5 @@
 import com.google.common.hash.Hashing;
+import dhbw.mosbach.builder.VehicleDirector;
 import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.command.*;
 import dhbw.mosbach.eventbus.events.*;
@@ -10,13 +11,13 @@ import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.Camera;
 import dhbw.mosbach.builder.components.light.Lidar;
 import dhbw.mosbach.builder.components.light.TurnSignal;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.composite.Battery;
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.cor.MotorTeam;
 import dhbw.mosbach.cor.SensoryTeam;
 import dhbw.mosbach.cor.ServiceCenter;
@@ -31,10 +32,7 @@ import dhbw.mosbach.state.Active;
 import dhbw.mosbach.state.Inactive;
 import dhbw.mosbach.visitor.Examiner;
 import dhbw.mosbach.visitor.IPart;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
@@ -44,6 +42,8 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class FunctionalityTests {
     private AutonomousTruck autonomousTruck;
     private Trailer trailer;
@@ -153,9 +153,9 @@ class FunctionalityTests {
     void testCentralUnitObservation(){
         CentralUnit centralUnit = spy(new CentralUnit());
         TruckMediator mediator = new TruckMediator();
-        TruckBuilder builder = new TruckBuilder(centralUnit, mediator);
-        TruckDirector truckDirector = new TruckDirector();
-        autonomousTruck =  truckDirector.build(builder);
+        TruckBuilder truckBuilder = new TruckBuilder(centralUnit, mediator);
+        VehicleDirector<AutonomousTruck, TruckBuilder> truckDirector = new TruckDirector();
+        autonomousTruck =  truckDirector.build(truckBuilder);
         trailer = testUtil.createTrailer();
 
         autonomousTruck.connect(trailer);
@@ -563,20 +563,20 @@ class FunctionalityTests {
         serviceCenter.handleDefect(Defect.E01, engine);
         serviceCenter.handleDefect(Defect.E02, engine);
         serviceCenter.handleDefect(Defect.E03, engine);
-        verify(mockOperationEngineerMO, times(2)).repair(Mockito.any(Engine.class),any());
-        verify(mockEmergencyEngineerMO, times(1)).repair(Mockito.any(Engine.class),any());
+        verify(mockOperationEngineerMO, times(2)).repairDefect(Mockito.any(Defect.class), Mockito.any(Engine.class));
+        verify(mockEmergencyEngineerMO, times(1)).repairDefect(Mockito.any(Defect.class), Mockito.any(Engine.class));
 
         serviceCenter.handleDefect(Defect.E01, camera);
         serviceCenter.handleDefect(Defect.E02, camera);
         serviceCenter.handleDefect(Defect.E03, camera);
-        verify(mockOperationEngineerSE, times(2)).repair(Mockito.any(Camera.class),any());
-        verify(mockEmergencyEngineerSE, times(1)).repair(Mockito.any(Camera.class),any());
+        verify(mockOperationEngineerSE, times(2)).repairDefect(Mockito.any(Defect.class), Mockito.any(Camera.class));
+        verify(mockEmergencyEngineerSE, times(1)).repairDefect(Mockito.any(Defect.class), Mockito.any(Camera.class));
 
         serviceCenter.handleDefect(Defect.E01, lidar);
         serviceCenter.handleDefect(Defect.E02, lidar);
         serviceCenter.handleDefect(Defect.E03, lidar);
-        verify(mockOperationEngineerSE, times(2)).repair(Mockito.any(Lidar.class),any());
-        verify(mockEmergencyEngineerSE, times(1)).repair(Mockito.any(Lidar.class),any());
+        verify(mockOperationEngineerSE, times(2)).repairDefect(Mockito.any(Defect.class), Mockito.any(Lidar.class));
+        verify(mockEmergencyEngineerSE, times(1)).repairDefect(Mockito.any(Defect.class), Mockito.any(Lidar.class));
     }
 
     @Test

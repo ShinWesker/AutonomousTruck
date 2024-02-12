@@ -1,6 +1,6 @@
 package dhbw.mosbach.eventbus.events;
 
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 import lombok.Getter;
 
 @Getter

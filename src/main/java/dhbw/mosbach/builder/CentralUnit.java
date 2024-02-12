@@ -28,8 +28,6 @@ public class CentralUnit implements ISensoricListener {
     private Boolean loadingPlanStatus = false;
     @Setter
     private AutonomousTruck truck;
-    @Getter
-    private final IEncryption encryption = new SHA256();
 
     public void execute(){
         command.execute();

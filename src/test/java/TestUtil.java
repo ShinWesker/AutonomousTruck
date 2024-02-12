@@ -55,6 +55,14 @@ public class TestUtil {
 
         Supervisor supervisor = new Supervisor("PasswordOperation");
 
+        technicalEmergency[0].setParent(emergencyTeamManager);
+        technicalEmergency[1].setParent(emergencyTeamManager);
+        technicalEmergency[2].setParent(emergencyTeamManager);
+
+        technicalOperation[0].setParent(operationTeamManager);
+        technicalOperation[1].setParent(operationTeamManager);
+        technicalOperation[2].setParent(operationTeamManager);
+
         supervisor.setSuccessor(operationTeamManager);
         operationTeamManager.setSuccessor(emergencyTeamManager);
         operationTeamManager.setParent(supervisor);
@@ -78,6 +86,9 @@ public class TestUtil {
         OperationTeamManager operationTeamManager = new OperationTeamManager(technicalOperation);
 
         Supervisor supervisor = new Supervisor("PasswordOperation");
+
+        technicalEmergency[0].setParent(emergencyTeamManager);
+        technicalOperation[0].setParent(operationTeamManager);
 
         supervisor.setSuccessor(operationTeamManager);
         operationTeamManager.setSuccessor(emergencyTeamManager);

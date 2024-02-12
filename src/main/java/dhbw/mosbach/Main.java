@@ -5,7 +5,7 @@ import dhbw.mosbach.builder.CentralUnit;
 import dhbw.mosbach.builder.VehicleDirector;
 import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.builder.components.light.Camera;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.trailer.TrailerBuilder;
 import dhbw.mosbach.builder.trailer.TrailerDirector;
@@ -13,7 +13,7 @@ import dhbw.mosbach.builder.truck.AutonomousTruck;
 import dhbw.mosbach.builder.truck.TruckBuilder;
 import dhbw.mosbach.builder.truck.TruckDirector;
 import dhbw.mosbach.composite.Battery;
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.cor.MotorTeam;
 import dhbw.mosbach.cor.SensoryTeam;
 import dhbw.mosbach.cor.ServiceCenter;
@@ -86,45 +86,8 @@ public class Main {
 
 
         // COR + Composite
-        TechnicalEngineer[] technicalEmergency = new TechnicalEngineer[1];
-        technicalEmergency[0] = new TechnicalEngineer();
-
-        TechnicalEngineer[] technicalOperation = new TechnicalEngineer[1];
-        technicalOperation[0] = new TechnicalEngineer();
-
-        EmergencyTeamManager emergencyTeamManager = new EmergencyTeamManager(technicalEmergency);
-        OperationTeamManager operationTeamManager = new OperationTeamManager(technicalOperation);
-
-        Supervisor supervisor = new Supervisor("PasswordOperation");
-
-        supervisor.setSuccessor(operationTeamManager);
-        operationTeamManager.setSuccessor(emergencyTeamManager);
-        operationTeamManager.setParent(supervisor);
-        emergencyTeamManager.setParent(supervisor);
-
-        MotorTeam motorTeam =  new MotorTeam(supervisor);
-
-        TechnicalEngineer[] technicalEngineers2 = new TechnicalEngineer[3];
-        technicalEngineers2[0] = new TechnicalEngineer();
-        technicalEngineers2[1] = new TechnicalEngineer();
-        technicalEngineers2[2] = new TechnicalEngineer();
-
-        TechnicalEngineer[] technicalEngineers3 = new TechnicalEngineer[3];
-        technicalEngineers3[0] = new TechnicalEngineer();
-        technicalEngineers3[1] = new TechnicalEngineer();
-        technicalEngineers3[2] = new TechnicalEngineer();
-
-        EmergencyTeamManager emergencyTeamManager1 = new EmergencyTeamManager(technicalEngineers2);
-        OperationTeamManager operationTeamManager1 = new OperationTeamManager(technicalEngineers3);
-
-        Supervisor supervisor1 = new Supervisor("PasswordOperation");
-
-        supervisor1.setSuccessor(operationTeamManager1);
-        operationTeamManager1.setSuccessor(emergencyTeamManager1);
-        SensoryTeam sensoryTeam = new SensoryTeam(supervisor1);
-
-        operationTeamManager1.setParent(supervisor);
-        emergencyTeamManager1.setParent(supervisor);
+        SensoryTeam sensoryTeam =  new SensoryTeam(createSupervisor());
+        MotorTeam motorTeam =  new MotorTeam(createSupervisor());
 
         sensoryTeam.setSuccessor(motorTeam);
 
@@ -134,5 +97,37 @@ public class Main {
         serviceCenter.handleDefect(Defect.E01, camera);
 
         autonomousTruck.examineParts(new Examiner(serviceCenter));
+    }
+
+    public static Supervisor createSupervisor(){
+        TechnicalEngineer[] technicalEmergency = new TechnicalEngineer[3];
+        technicalEmergency[0] = new TechnicalEngineer();
+        technicalEmergency[1] = new TechnicalEngineer();
+        technicalEmergency[2] = new TechnicalEngineer();
+
+        TechnicalEngineer[] technicalOperation = new TechnicalEngineer[3];
+        technicalOperation[0] = new TechnicalEngineer();
+        technicalOperation[1] = new TechnicalEngineer();
+        technicalOperation[2] = new TechnicalEngineer();
+
+        EmergencyTeamManager emergencyTeamManager = new EmergencyTeamManager(technicalEmergency);
+        OperationTeamManager operationTeamManager = new OperationTeamManager(technicalOperation);
+
+        Supervisor supervisor = new Supervisor("PasswordOperation");
+
+        technicalEmergency[0].setParent(emergencyTeamManager);
+        technicalEmergency[1].setParent(emergencyTeamManager);
+        technicalEmergency[2].setParent(emergencyTeamManager);
+
+        technicalOperation[0].setParent(operationTeamManager);
+        technicalOperation[1].setParent(operationTeamManager);
+        technicalOperation[2].setParent(operationTeamManager);
+
+        supervisor.setSuccessor(operationTeamManager);
+        operationTeamManager.setSuccessor(emergencyTeamManager);
+        operationTeamManager.setParent(supervisor);
+        emergencyTeamManager.setParent(supervisor);
+
+        return supervisor;
     }
 }

@@ -1,7 +1,7 @@
 package dhbw.mosbach.command;
 
 import dhbw.mosbach.builder.components.light.TurnSignal;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 
 import java.util.Arrays;
 

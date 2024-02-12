@@ -8,18 +8,18 @@ public class CBrake implements ICommand {
     private final Axle[] axles;
 
     @Getter
-    private final int percentage;
+    private final int intensity;
 
-    public CBrake(Axle[] axles, int percentage) {
+    public CBrake(Axle[] axles, int intensity) {
         this.axles = axles;
-        this.percentage = percentage;
+        this.intensity = intensity;
     }
 
     @Override
     public void execute() {
         for (Axle a : axles){
             for (Brake b : a.getBrakes()){
-                b.setPercentage(percentage);
+                b.brake(intensity);
             }
         }
     }

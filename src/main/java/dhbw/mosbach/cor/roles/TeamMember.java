@@ -1,6 +1,6 @@
 package dhbw.mosbach.cor.roles;
 
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.visitor.IPart;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package dhbw.mosbach.builder.enums;
+package dhbw.mosbach.enums;
 
 public enum Position {
     LEFT, RIGHT, STRAIGHT

@@ -1,11 +1,12 @@
 package dhbw.mosbach.cor;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.cor.roles.Supervisor;
 import dhbw.mosbach.visitor.IPart;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MotorTeam extends ATeam {
+public class MotorTeam extends Team {
     private final List<String> permissions;
     public MotorTeam(Supervisor supervisor) {
         super(supervisor);

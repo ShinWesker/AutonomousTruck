@@ -6,7 +6,7 @@ import dhbw.mosbach.builder.components.ExteriorMirror;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.builder.trailer.Trailer;
 import dhbw.mosbach.builder.components.chassis.TruckChassis;
 import dhbw.mosbach.builder.IVehicle;
@@ -110,16 +110,16 @@ public class AutonomousTruck implements IVehicle {
 
     public void connect(Trailer trailer) {
         truckChassis.getCoupling().connect(trailer);
-        setupThreePoleConnector(trailer);
+        setupConnector(trailer);
     }
 
-    private void setupThreePoleConnector(Trailer trailer) {
+    private void setupConnector(Trailer trailer) {
         threePoleConnector = new ThreePoleConnector();
         trailer.connect(this);
-        connectComponentsToThreePoleConnector(trailer);
+        connectComponents(trailer);
     }
 
-    private void connectComponentsToThreePoleConnector(Trailer trailer) {
+    private void connectComponents(Trailer trailer) {
         for (Axle axle : trailer.getTrailerChassis().getAxles()) {
             for (Brake brake : axle.getBrakes()) {
                 threePoleConnector.addSubscriberBrakeBus(brake);

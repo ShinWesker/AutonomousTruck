@@ -4,5 +4,5 @@ import lombok.Setter;
 
 @Setter
 public class Wheel {
-    private int degree;
+
 }

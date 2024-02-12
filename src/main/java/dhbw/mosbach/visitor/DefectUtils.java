@@ -1,6 +1,6 @@
 package dhbw.mosbach.visitor;
 
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 
 import java.util.Random;
 

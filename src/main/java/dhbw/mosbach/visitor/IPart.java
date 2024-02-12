@@ -1,6 +1,6 @@
 package dhbw.mosbach.visitor;
 
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.Defect;
 
 public interface IPart {
     void acceptPartVisitor(IPartVisitor iPartVisitor);

@@ -1,8 +1,8 @@
 package dhbw.mosbach.builder.components.light;
 
 import com.google.common.eventbus.Subscribe;
-import dhbw.mosbach.builder.enums.HorizontalPosition;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.HorizontalPosition;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.eventbus.events.EventTurnSignalOff;
 import dhbw.mosbach.eventbus.events.EventTurnSignalOn;
 import dhbw.mosbach.mediator.ITruckMediator;
@@ -24,14 +24,14 @@ public class TurnSignal extends ElectronicComponent {
     }
 
     @Subscribe
-    public void receive(EventTurnSignalOn eventTurnSignalOn){
-        if (position == eventTurnSignalOn.getPosition()) {
+    public void receive(EventTurnSignalOn event){
+        if (position == event.getPosition()) {
             status = true;
         }
     }
     @Subscribe
-    public void receive(EventTurnSignalOff eventTurnSignalOff){
-        if (position == eventTurnSignalOff.getPosition()) {
+    public void receive(EventTurnSignalOff event){
+        if (position == event.getPosition()) {
             status = false;
         }
     }

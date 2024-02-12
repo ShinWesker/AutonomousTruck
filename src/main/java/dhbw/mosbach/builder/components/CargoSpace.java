@@ -1,5 +1,5 @@
 package dhbw.mosbach.builder.components;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.Position;
 import lombok.Getter;
 
 public class CargoSpace {

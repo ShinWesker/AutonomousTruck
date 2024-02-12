@@ -10,8 +10,12 @@ import lombok.Setter;
 public class Brake {
     private int percentage = 0;
 
+    public void brake(int intensity){
+        percentage = intensity;
+    }
+
     @Subscribe
-    public void receive(EventBrake eventBrake){
-        this.percentage = eventBrake.getPercentage();
+    public void receive(EventBrake event){
+        this.percentage = event.getPercentage();
     }
 }

@@ -2,20 +2,20 @@ package dhbw.mosbach.builder.truck;
 
 import dhbw.mosbach.bridge.TruckBatteryControl;
 import dhbw.mosbach.builder.CentralUnit;
-import dhbw.mosbach.builder.VehicleBuilder;
+import dhbw.mosbach.builder.IVehicleBuilder;
 import dhbw.mosbach.builder.components.*;
 import dhbw.mosbach.builder.components.chassis.TruckChassis;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.axle.SteeringAxle;
 import dhbw.mosbach.builder.components.axle.Wheel;
 import dhbw.mosbach.builder.components.light.*;
-import dhbw.mosbach.builder.enums.HorizontalPosition;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.HorizontalPosition;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.composite.Battery;
 import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.mediator.TruckMediator;
 
-public class TruckBuilder implements VehicleBuilder<AutonomousTruck> {
+public class TruckBuilder implements IVehicleBuilder<AutonomousTruck> {
     CentralUnit centralUnit;
     private SteeringAxle steeringAxle;
     private Cabine cabine;

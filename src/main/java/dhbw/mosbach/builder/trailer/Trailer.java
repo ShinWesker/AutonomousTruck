@@ -19,7 +19,7 @@ public class Trailer implements IVehicle {
         trailerChassis.load(pallet,index);
     }
 
-    public void connect(AutonomousTruck autonomousTruck) {
-        trailerChassis.connect(autonomousTruck);
+    public void connect(AutonomousTruck truck) {
+        trailerChassis.connect(truck);
     }
 }

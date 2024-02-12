@@ -1,8 +1,8 @@
 package dhbw.mosbach.builder.components.light;
 
-import dhbw.mosbach.builder.enums.HorizontalPosition;
-import dhbw.mosbach.builder.enums.Position;
-import dhbw.mosbach.cor.Defect;
+import dhbw.mosbach.enums.HorizontalPosition;
+import dhbw.mosbach.enums.Position;
+import dhbw.mosbach.enums.Defect;
 import dhbw.mosbach.mediator.ITruckMediator;
 import dhbw.mosbach.visitor.DefectUtils;
 import dhbw.mosbach.visitor.IControlVisitor;

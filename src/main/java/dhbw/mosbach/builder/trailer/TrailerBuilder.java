@@ -1,17 +1,16 @@
 package dhbw.mosbach.builder.trailer;
 
-import dhbw.mosbach.builder.VehicleBuilder;
+import dhbw.mosbach.builder.IVehicleBuilder;
 import dhbw.mosbach.builder.components.Brake;
-import dhbw.mosbach.builder.enums.HorizontalPosition;
-import dhbw.mosbach.builder.enums.Position;
+import dhbw.mosbach.enums.HorizontalPosition;
+import dhbw.mosbach.enums.Position;
 import dhbw.mosbach.builder.components.axle.Axle;
 import dhbw.mosbach.builder.components.axle.Wheel;
 import dhbw.mosbach.builder.components.chassis.TrailerChassis;
 import dhbw.mosbach.builder.components.light.BrakeLight;
 import dhbw.mosbach.builder.components.light.TurnSignal;
 
-public class TrailerBuilder implements VehicleBuilder<Trailer> {
-
+public class TrailerBuilder implements IVehicleBuilder<Trailer> {
     TrailerChassis.TrailerChassisBuilder trailerChassisBuilder;
     @Override
     public void buildChassis() {
